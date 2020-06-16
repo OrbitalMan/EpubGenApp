@@ -706,14 +706,14 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="EpubGenApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="616" height="465"/>
+                        <rect key="frame" x="0.0" y="0.0" width="722" height="465"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="20" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IfT-PM-YvI">
-                                <rect key="frame" x="10" y="10" width="596" height="445"/>
+                                <rect key="frame" x="10" y="10" width="702" height="445"/>
                                 <subviews>
                                     <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Eo-8k-Nhy">
-                                        <rect key="frame" x="53" y="233" width="490" height="212"/>
+                                        <rect key="frame" x="106" y="233" width="490" height="212"/>
                                         <subviews>
                                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wju-Yt-g6l">
                                                 <rect key="frame" x="0.0" y="38" width="240" height="135"/>
@@ -796,29 +796,66 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3N-Fr-Tex">
-                                        <rect key="frame" x="53" y="0.0" width="490" height="213"/>
+                                        <rect key="frame" x="38" y="0.0" width="626" height="213"/>
                                         <subviews>
                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9qF-tF-NtM">
-                                                <rect key="frame" x="0.0" y="8" width="240" height="197"/>
+                                                <rect key="frame" x="0.0" y="8" width="308" height="197"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4dA-Cf-4tE">
-                                                        <rect key="frame" x="72" y="176" width="96" height="21"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="paragraph_1_2.xhtml" placeholderString="Text Source Path" drawsBackground="YES" id="tCb-R9-apo">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZBV-It-AkI">
-                                                        <rect key="frame" x="72" y="145" width="96" height="21"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="../Audio/paragraph_1_2.mp3" placeholderString="Audio Source Path" drawsBackground="YES" id="UXn-rr-RtN">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
+                                                    <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6J9-c1-VOh">
+                                                        <rect key="frame" x="56" y="145" width="196" height="52"/>
+                                                        <subviews>
+                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4dA-Cf-4tE">
+                                                                <rect key="frame" x="50" y="31" width="96" height="21"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="paragraph_1_2.xhtml" placeholderString="Text Source Path" drawsBackground="YES" id="tCb-R9-apo">
+                                                                    <font key="font" usesAppearanceFont="YES"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="piW-lC-bQu">
+                                                                <rect key="frame" x="0.0" y="0.0" width="196" height="21"/>
+                                                                <subviews>
+                                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZBV-It-AkI">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="96" height="21"/>
+                                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="../Audio/paragraph_1_2.mp3" placeholderString="Audio Source Path" drawsBackground="YES" id="UXn-rr-RtN">
+                                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A3r-lZ-7sR">
+                                                                        <rect key="frame" x="106" y="0.0" width="90" height="21"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="90" id="Z8G-Db-cSi"/>
+                                                                        </constraints>
+                                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="0.000" placeholderString="Offset (seconds)" drawsBackground="YES" id="QrY-RE-oes">
+                                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <visibilityPriorities>
+                                                            <integer value="1000"/>
+                                                            <integer value="1000"/>
+                                                        </visibilityPriorities>
+                                                        <customSpacing>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                        </customSpacing>
+                                                    </stackView>
                                                     <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zvI-Rw-HO2">
-                                                        <rect key="frame" x="0.0" y="0.0" width="240" height="135"/>
+                                                        <rect key="frame" x="34" y="0.0" width="240" height="135"/>
                                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="qbe-hs-wP9">
                                                             <rect key="frame" x="0.0" y="0.0" width="240" height="135"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -856,27 +893,25 @@
                                                 <visibilityPriorities>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
-                                                    <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
                                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ONr-Ya-jRg">
-                                                <rect key="frame" x="250" y="39" width="240" height="135"/>
+                                                <rect key="frame" x="318" y="39" width="308" height="135"/>
                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="KIm-Cn-m11">
-                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="135"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="308" height="135"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" smartInsertDelete="YES" id="JKH-4f-i7o">
-                                                            <rect key="frame" x="0.0" y="0.0" width="240" height="135"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="308" height="135"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            <size key="minSize" width="240" height="135"/>
-                                                            <size key="maxSize" width="240" height="10000000"/>
+                                                            <size key="minSize" width="308" height="135"/>
+                                                            <size key="maxSize" width="308" height="10000000"/>
                                                             <attributedString key="textStorage">
                                                                 <fragment content="Smil Output">
                                                                     <attributes>
@@ -895,7 +930,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="bJp-nb-cVD">
-                                                    <rect key="frame" x="224" y="0.0" width="16" height="135"/>
+                                                    <rect key="frame" x="292" y="0.0" width="16" height="135"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                             </scrollView>
@@ -929,6 +964,7 @@
                     </view>
                     <connections>
                         <outlet property="smilInputAudioSourceView" destination="ZBV-It-AkI" id="Jbh-Gz-rnV"/>
+                        <outlet property="smilInputOffsetView" destination="A3r-lZ-7sR" id="3VH-ys-KDc"/>
                         <outlet property="smilInputTextSourceView" destination="4dA-Cf-4tE" id="2jr-lG-qhy"/>
                         <outlet property="smilInputView" destination="HLc-yn-jGc" id="ShU-4X-cZA"/>
                         <outlet property="smilOutputView" destination="JKH-4f-i7o" id="b6f-44-vdo"/>

@@ -21,14 +21,19 @@ struct SmilGenerator {
     var output: String {
         return smil(from: inputContents,
                     textPath: "paragraph_1_2.xhtml",
-                    audioPath: "../Audio/paragraph_1_2.mp3")
+                    audioPath: "../Audio/paragraph_1_2.mp3",
+                    offset: nil)
     }
     
     func smil(from audacityString: String,
               textPath: String,
-              audioPath: String) -> String {
+              audioPath: String,
+              offset: TimeInterval?) -> String {
         let timeStamps = audacityString.components(separatedBy: .whitespacesAndNewlines).compactMap(TimeInterval.init)
-        let sortedTimeStamps = Array(Set(timeStamps)).sorted()
+        var sortedTimeStamps = Array(Set(timeStamps)).sorted()
+        if let offset = offset, offset != 0 {
+            sortedTimeStamps = sortedTimeStamps.map { max(0, $0+offset) }
+        }
         let smilStamps = sortedTimeStamps.map(smilString)
         var smil = """
         <?xml version="1.0" encoding="utf-8" ?>

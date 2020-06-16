@@ -13,16 +13,22 @@ class ViewController: NSViewController {
     @IBOutlet weak var xhtmlInputView: NSTextView!
     @IBOutlet weak var smilInputTextSourceView: NSTextField!
     @IBOutlet weak var smilInputAudioSourceView: NSTextField!
+    @IBOutlet weak var smilInputOffsetView: NSTextField!
     @IBOutlet weak var smilInputView: NSTextView!
     @IBOutlet weak var xhtmlOutputView: NSTextView!
     @IBOutlet weak var smilOutputView: NSTextView!
     
     var allTextViews: [NSTextView] {
-        return [xhtmlInputView, xhtmlOutputView, smilInputView, smilOutputView].compactMap { $0 }
+        return [xhtmlInputView,
+                xhtmlOutputView,
+                smilInputView,
+                smilOutputView].compactMap { $0 }
     }
     
     var allTextFields: [NSTextField] {
-        return [smilInputTextSourceView, smilInputAudioSourceView].compactMap { $0 }
+        return [smilInputTextSourceView,
+                smilInputAudioSourceView,
+                smilInputOffsetView].compactMap { $0 }
     }
     
     let spanEnumerator = SpanEnumerator()
@@ -42,6 +48,13 @@ class ViewController: NSViewController {
         smilOutputView.string = smilGenerator.output
     }
     
+    func updateSmil() {
+        smilOutputView.string = smilGenerator.smil(from: smilInputView.string,
+                                                   textPath: smilInputTextSourceView.stringValue,
+                                                   audioPath: smilInputAudioSourceView.stringValue,
+                                                   offset: smilInputOffsetView.doubleValue)
+    }
+    
 }
 
 extension ViewController: NSTextViewDelegate {
@@ -51,9 +64,7 @@ extension ViewController: NSTextViewDelegate {
         case xhtmlInputView:
             xhtmlOutputView.string = spanEnumerator.output(input: xhtmlInputView.string)
         case smilInputView:
-            smilOutputView.string = smilGenerator.smil(from: smilInputView.string,
-                                                       textPath: smilInputTextSourceView.stringValue,
-                                                       audioPath: smilInputAudioSourceView.stringValue)
+            updateSmil()
         default:
             break
         }
@@ -64,14 +75,13 @@ extension ViewController: NSTextViewDelegate {
 extension ViewController: NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {
-        switch obj.object as? NSTextField {
-        case smilInputTextSourceView, smilInputAudioSourceView:
-            smilOutputView.string = smilGenerator.smil(from: smilInputView.string,
-                                                       textPath: smilInputTextSourceView.stringValue,
-                                                       audioPath: smilInputAudioSourceView.stringValue)
-        default:
-            break
+        guard
+            let textField = obj.object as? NSTextField,
+            allTextFields.contains(textField) else
+        {
+            return
         }
+        updateSmil()
     }
     
 }
