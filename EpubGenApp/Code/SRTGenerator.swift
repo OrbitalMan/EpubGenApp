@@ -37,6 +37,33 @@ struct SRTGenerator {
         return srt
     }
     
+    func srtFromIntervalFragments(from audacityString: String,
+                                  offset: TimeInterval?) -> String {
+        var timeStamps = audacityString.components(separatedBy: .whitespacesAndNewlines).compactMap(TimeInterval.init)
+        if let offset = offset, offset != 0 {
+            timeStamps = timeStamps.map { max(0, $0+offset) }
+        }
+        let srtStamps = timeStamps.map(srtString)
+        var srt = ""
+        if srtStamps.count < 2 {
+            return srt
+        }
+        for pairIndex in 0..<timeStamps.count/2 {
+            let cueId = pairIndex+1
+            let left = srtStamps[pairIndex*2]
+            let right = srtStamps[pairIndex*2+1]
+            let cue = """
+            \(cueId)
+            \(left) --> \(right)
+            Caption text \(cueId)
+            
+            
+            """
+            srt.append(cue)
+        }
+        return srt
+    }
+    
     func srtString(from interval: TimeInterval) -> String {
         let date = Date(timeIntervalSinceReferenceDate: interval)
         return DateFormatter.srtFormatter.string(from: date)
