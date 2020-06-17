@@ -802,18 +802,50 @@
                                                 <rect key="frame" x="0.0" y="8" width="308" height="197"/>
                                                 <subviews>
                                                     <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6J9-c1-VOh">
-                                                        <rect key="frame" x="56" y="145" width="196" height="52"/>
+                                                        <rect key="frame" x="51" y="145" width="206" height="52"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4dA-Cf-4tE">
-                                                                <rect key="frame" x="50" y="31" width="96" height="21"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="paragraph_1_2.xhtml" placeholderString="Text Source Path" drawsBackground="YES" id="tCb-R9-apo">
-                                                                    <font key="font" usesAppearanceFont="YES"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
+                                                            <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FsH-ZD-5cx">
+                                                                <rect key="frame" x="15" y="31" width="176" height="21"/>
+                                                                <subviews>
+                                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EMQ-jB-ufe">
+                                                                        <rect key="frame" x="-2" y="-3" width="75" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="70" id="mMq-4S-CBk"/>
+                                                                        </constraints>
+                                                                        <popUpButtonCell key="cell" type="push" title="SMIL" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="MgV-gF-Bb4" id="XBj-Po-B95">
+                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                            <font key="font" metaFont="system"/>
+                                                                            <menu key="menu" id="XAU-86-FCf">
+                                                                                <items>
+                                                                                    <menuItem title="SMIL" id="MgV-gF-Bb4"/>
+                                                                                    <menuItem title="SRT" id="LP5-nW-JxS"/>
+                                                                                </items>
+                                                                            </menu>
+                                                                        </popUpButtonCell>
+                                                                        <connections>
+                                                                            <action selector="timingTypePicked:" target="XfG-lQ-9wD" id="5OF-5t-rqk"/>
+                                                                        </connections>
+                                                                    </popUpButton>
+                                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4dA-Cf-4tE">
+                                                                        <rect key="frame" x="80" y="0.0" width="96" height="21"/>
+                                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="paragraph_1_2.xhtml" placeholderString="Text Source Path" drawsBackground="YES" id="tCb-R9-apo">
+                                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                            </stackView>
                                                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="piW-lC-bQu">
-                                                                <rect key="frame" x="0.0" y="0.0" width="196" height="21"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="206" height="21"/>
                                                                 <subviews>
                                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZBV-It-AkI">
                                                                         <rect key="frame" x="0.0" y="0.0" width="96" height="21"/>
@@ -824,11 +856,11 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A3r-lZ-7sR">
-                                                                        <rect key="frame" x="106" y="0.0" width="90" height="21"/>
+                                                                        <rect key="frame" x="106" y="0.0" width="100" height="21"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="90" id="Z8G-Db-cSi"/>
+                                                                            <constraint firstAttribute="width" constant="100" id="Z8G-Db-cSi"/>
                                                                         </constraints>
-                                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="0.000" placeholderString="Offset (seconds)" drawsBackground="YES" id="QrY-RE-oes">
+                                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="0.000" placeholderString="Offset (sec)" drawsBackground="YES" id="QrY-RE-oes">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -868,7 +900,7 @@
                                                                     <size key="minSize" width="240" height="135"/>
                                                                     <size key="maxSize" width="240" height="10000000"/>
                                                                     <attributedString key="textStorage">
-                                                                        <fragment content="Smil Input">
+                                                                        <fragment content="Timestamps (seconds)">
                                                                             <attributes>
                                                                                 <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <font key="NSFont" metaFont="user"/>
@@ -913,7 +945,7 @@
                                                             <size key="minSize" width="308" height="135"/>
                                                             <size key="maxSize" width="308" height="10000000"/>
                                                             <attributedString key="textStorage">
-                                                                <fragment content="Smil Output">
+                                                                <fragment content="Output">
                                                                     <attributes>
                                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                         <font key="NSFont" metaFont="user"/>
@@ -963,13 +995,14 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="smilInputAudioSourceView" destination="ZBV-It-AkI" id="Jbh-Gz-rnV"/>
-                        <outlet property="smilInputOffsetView" destination="A3r-lZ-7sR" id="3VH-ys-KDc"/>
-                        <outlet property="smilInputTextSourceView" destination="4dA-Cf-4tE" id="2jr-lG-qhy"/>
-                        <outlet property="smilInputView" destination="HLc-yn-jGc" id="ShU-4X-cZA"/>
-                        <outlet property="smilOutputView" destination="JKH-4f-i7o" id="b6f-44-vdo"/>
-                        <outlet property="xhtmlInputView" destination="dtC-PV-aB9" id="yQi-Hm-9mX"/>
-                        <outlet property="xhtmlOutputView" destination="Zvg-Rd-qB1" id="KAG-ze-IwS"/>
+                        <outlet property="smilAudioSourceInput" destination="ZBV-It-AkI" id="Jbh-Gz-rnV"/>
+                        <outlet property="smilTextSourceInput" destination="4dA-Cf-4tE" id="2jr-lG-qhy"/>
+                        <outlet property="timingInput" destination="HLc-yn-jGc" id="ShU-4X-cZA"/>
+                        <outlet property="timingOffsetInput" destination="A3r-lZ-7sR" id="3VH-ys-KDc"/>
+                        <outlet property="timingOutput" destination="JKH-4f-i7o" id="b6f-44-vdo"/>
+                        <outlet property="timingTypePicker" destination="EMQ-jB-ufe" id="ZEC-PJ-7Ay"/>
+                        <outlet property="xhtmlInput" destination="dtC-PV-aB9" id="yQi-Hm-9mX"/>
+                        <outlet property="xhtmlOutput" destination="Zvg-Rd-qB1" id="KAG-ze-IwS"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

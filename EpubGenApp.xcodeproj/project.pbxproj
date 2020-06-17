@@ -15,6 +15,7 @@
 		853E9E822499327300DBAC8B /* timings.txt in Resources */ = {isa = PBXBuildFile; fileRef = 853E9E812499327300DBAC8B /* timings.txt */; };
 		853E9E85249932DB00DBAC8B /* SpanEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E84249932DB00DBAC8B /* SpanEnumerator.swift */; };
 		853E9E872499330700DBAC8B /* SmilGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E862499330700DBAC8B /* SmilGenerator.swift */; };
+		853E9E8D249A99E500DBAC8B /* SRTGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		853E9E812499327300DBAC8B /* timings.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timings.txt; sourceTree = "<group>"; };
 		853E9E84249932DB00DBAC8B /* SpanEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpanEnumerator.swift; sourceTree = "<group>"; };
 		853E9E862499330700DBAC8B /* SmilGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmilGenerator.swift; sourceTree = "<group>"; };
+		853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRTGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			children = (
 				853E9E84249932DB00DBAC8B /* SpanEnumerator.swift */,
 				853E9E862499330700DBAC8B /* SmilGenerator.swift */,
+				853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				853E9E712499323600DBAC8B /* ViewController.swift in Sources */,
 				853E9E6F2499323600DBAC8B /* AppDelegate.swift in Sources */,
 				853E9E872499330700DBAC8B /* SmilGenerator.swift in Sources */,
+				853E9E8D249A99E500DBAC8B /* SRTGenerator.swift in Sources */,
 				853E9E85249932DB00DBAC8B /* SpanEnumerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

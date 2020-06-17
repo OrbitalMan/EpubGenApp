@@ -35,21 +35,9 @@ struct SmilGenerator {
             sortedTimeStamps = sortedTimeStamps.map { max(0, $0+offset) }
         }
         let smilStamps = sortedTimeStamps.map(smilString)
-        var smil = """
-        <?xml version="1.0" encoding="utf-8" ?>
-        <smil version="3.0" xmlns="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops">
-        <body>
-        <seq epub:textref="\(textPath)" epub:type="bodymatter chapter" id="seq1">
-        
-        """
-        let smilFooter = """
-        </seq>
-        </body>
-        </smil>
-        
-        """
+        var smil = smilHeader(textPath: textPath)
         if smilStamps.isEmpty {
-            return smil+smilFooter
+            return smil+smilFooter()
         }
         for index in 0..<smilStamps.count-1 {
             let parId = String(format: "%06d", index+1)
@@ -63,12 +51,31 @@ struct SmilGenerator {
             """
             smil.append(paragraph)
         }
-        return smil+smilFooter
+        return smil+smilFooter()
+    }
+    
+    func smilHeader(textPath: String) -> String {
+        return """
+        <?xml version="1.0" encoding="utf-8" ?>
+        <smil version="3.0" xmlns="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops">
+        <body>
+        <seq epub:textref="\(textPath)" epub:type="bodymatter chapter" id="seq1">
+        
+        """
     }
     
     func smilString(from interval: TimeInterval) -> String {
         let date = Date(timeIntervalSinceReferenceDate: interval)
         return DateFormatter.smilFormatter.string(from: date)
+    }
+    
+    func smilFooter() -> String {
+        return """
+        </seq>
+        </body>
+        </smil>
+        
+        """
     }
     
 }

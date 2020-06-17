@@ -8,31 +8,43 @@
 
 import Cocoa
 
+enum TimingType: String, CaseIterable {
+    case smil = "SMIL"
+    case srt = "SRT"
+}
+
 class ViewController: NSViewController {
     
-    @IBOutlet weak var xhtmlInputView: NSTextView!
-    @IBOutlet weak var smilInputTextSourceView: NSTextField!
-    @IBOutlet weak var smilInputAudioSourceView: NSTextField!
-    @IBOutlet weak var smilInputOffsetView: NSTextField!
-    @IBOutlet weak var smilInputView: NSTextView!
-    @IBOutlet weak var xhtmlOutputView: NSTextView!
-    @IBOutlet weak var smilOutputView: NSTextView!
+    @IBOutlet weak var xhtmlInput: NSTextView!
+    @IBOutlet weak var timingTypePicker: NSPopUpButton!
+    @IBOutlet weak var smilTextSourceInput: NSTextField!
+    @IBOutlet weak var smilAudioSourceInput: NSTextField!
+    @IBOutlet weak var timingOffsetInput: NSTextField!
+    @IBOutlet weak var timingInput: NSTextView!
+    @IBOutlet weak var xhtmlOutput: NSTextView!
+    @IBOutlet weak var timingOutput: NSTextView!
     
     var allTextViews: [NSTextView] {
-        return [xhtmlInputView,
-                xhtmlOutputView,
-                smilInputView,
-                smilOutputView].compactMap { $0 }
+        return [xhtmlInput,
+                xhtmlOutput,
+                timingInput,
+                timingOutput].compactMap { $0 }
     }
     
     var allTextFields: [NSTextField] {
-        return [smilInputTextSourceView,
-                smilInputAudioSourceView,
-                smilInputOffsetView].compactMap { $0 }
+        return [smilTextSourceInput,
+                smilAudioSourceInput,
+                timingOffsetInput].compactMap { $0 }
     }
     
-    let spanEnumerator = SpanEnumerator()
-    let smilGenerator = SmilGenerator()
+    var timingType: TimingType {
+        guard let selectedItemTitle = timingTypePicker?.titleOfSelectedItem else { return .smil }
+        return TimingType(rawValue: selectedItemTitle) ?? .smil
+    }
+    
+    lazy var spanEnumerator = SpanEnumerator()
+    lazy var smilGenerator = SmilGenerator()
+    lazy var srtGenerator = SRTGenerator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,15 +56,41 @@ class ViewController: NSViewController {
             textField.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
             textField.delegate = self
         }
-        xhtmlOutputView.string = spanEnumerator.output
-        smilOutputView.string = smilGenerator.output
+        xhtmlOutput.string = spanEnumerator.output
+        timingOutput.string = smilGenerator.output
+    }
+    
+    @IBAction func timingTypePicked(_ sender: NSPopUpButton) {
+        switch timingType {
+        case .smil:
+            smilTextSourceInput.isEnabled = true
+            smilAudioSourceInput.isEnabled = true
+        case .srt:
+            smilTextSourceInput.isEnabled = false
+            smilAudioSourceInput.isEnabled = false
+        }
+        updateTiming()
+    }
+    
+    func updateTiming() {
+        switch timingType {
+        case .smil:
+            updateSmil()
+        case .srt:
+            updateSRT()
+        }
     }
     
     func updateSmil() {
-        smilOutputView.string = smilGenerator.smil(from: smilInputView.string,
-                                                   textPath: smilInputTextSourceView.stringValue,
-                                                   audioPath: smilInputAudioSourceView.stringValue,
-                                                   offset: smilInputOffsetView.doubleValue)
+        timingOutput.string = smilGenerator.smil(from: timingInput.string,
+                                                 textPath: smilTextSourceInput.stringValue,
+                                                 audioPath: smilAudioSourceInput.stringValue,
+                                                 offset: timingOffsetInput.doubleValue)
+    }
+    
+    func updateSRT() {
+        timingOutput.string = srtGenerator.srt(from: timingInput.string,
+                                               offset: timingOffsetInput.doubleValue)
     }
     
 }
@@ -61,10 +99,10 @@ extension ViewController: NSTextViewDelegate {
     
     func textDidChange(_ notification: Notification) {
         switch notification.object as? NSTextView {
-        case xhtmlInputView:
-            xhtmlOutputView.string = spanEnumerator.output(input: xhtmlInputView.string)
-        case smilInputView:
-            updateSmil()
+        case xhtmlInput:
+            xhtmlOutput.string = spanEnumerator.output(input: xhtmlInput.string)
+        case timingInput:
+            updateTiming()
         default:
             break
         }
@@ -81,7 +119,7 @@ extension ViewController: NSTextFieldDelegate {
         {
             return
         }
-        updateSmil()
+        updateTiming()
     }
     
 }
