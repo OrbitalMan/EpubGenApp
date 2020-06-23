@@ -73,8 +73,11 @@ struct SRTGenerator {
 
 extension DateFormatter {
     
+    static let srtReferenceDate = Date(timeIntervalSinceReferenceDate: 0)
+    
     static let srtFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
+        dateFormatter.defaultDate = srtReferenceDate
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         dateFormatter.dateFormat = "HH:mm:ss,SSS"
         return dateFormatter

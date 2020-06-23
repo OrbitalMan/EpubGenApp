@@ -82,8 +82,11 @@ struct SmilGenerator {
 
 extension DateFormatter {
     
+    static let smilReferenceDate = Date(timeIntervalSinceReferenceDate: 0)
+    
     static let smilFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
+        dateFormatter.defaultDate = smilReferenceDate
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         dateFormatter.dateFormat = "H:mm:ss.SSS"
         return dateFormatter
