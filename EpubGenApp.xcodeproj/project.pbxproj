@@ -3,22 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		681F2C6424A22C7600FDAC6B /* ColoredSpanGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */; };
+		681F2C6724A22E0600FDAC6B /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 681F2C6624A22E0600FDAC6B /* SwiftSoup */; };
+		683BCC9024A35AD4007E7833 /* ColoredSpanModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */; };
 		853E9E6F2499323600DBAC8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E6E2499323600DBAC8B /* AppDelegate.swift */; };
 		853E9E712499323600DBAC8B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E702499323600DBAC8B /* ViewController.swift */; };
 		853E9E732499323D00DBAC8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 853E9E722499323D00DBAC8B /* Assets.xcassets */; };
 		853E9E762499323D00DBAC8B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 853E9E742499323D00DBAC8B /* Main.storyboard */; };
 		853E9E802499326700DBAC8B /* paragraph.xhtml in Resources */ = {isa = PBXBuildFile; fileRef = 853E9E7F2499326700DBAC8B /* paragraph.xhtml */; };
 		853E9E822499327300DBAC8B /* timings.txt in Resources */ = {isa = PBXBuildFile; fileRef = 853E9E812499327300DBAC8B /* timings.txt */; };
-		853E9E85249932DB00DBAC8B /* SpanEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E84249932DB00DBAC8B /* SpanEnumerator.swift */; };
 		853E9E872499330700DBAC8B /* SmilGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E862499330700DBAC8B /* SmilGenerator.swift */; };
 		853E9E8D249A99E500DBAC8B /* SRTGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanGenerator.swift; sourceTree = "<group>"; };
+		683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanModels.swift; sourceTree = "<group>"; };
 		853E9E6B2499323600DBAC8B /* EpubGenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpubGenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853E9E6E2499323600DBAC8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		853E9E702499323600DBAC8B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -26,9 +30,8 @@
 		853E9E752499323D00DBAC8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		853E9E772499323D00DBAC8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		853E9E782499323D00DBAC8B /* EpubGenApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EpubGenApp.entitlements; sourceTree = "<group>"; };
-		853E9E7F2499326700DBAC8B /* paragraph.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = paragraph.xhtml; sourceTree = "<group>"; };
+		853E9E7F2499326700DBAC8B /* paragraph.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = text.xml; path = paragraph.xhtml; sourceTree = "<group>"; tabWidth = 2; };
 		853E9E812499327300DBAC8B /* timings.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timings.txt; sourceTree = "<group>"; };
-		853E9E84249932DB00DBAC8B /* SpanEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpanEnumerator.swift; sourceTree = "<group>"; };
 		853E9E862499330700DBAC8B /* SmilGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmilGenerator.swift; sourceTree = "<group>"; };
 		853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRTGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681F2C6724A22E0600FDAC6B /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,7 +91,8 @@
 		853E9E83249932AF00DBAC8B /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				853E9E84249932DB00DBAC8B /* SpanEnumerator.swift */,
+				681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */,
+				683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */,
 				853E9E862499330700DBAC8B /* SmilGenerator.swift */,
 				853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */,
 			);
@@ -110,6 +115,9 @@
 			dependencies = (
 			);
 			name = EpubGenApp;
+			packageProductDependencies = (
+				681F2C6624A22E0600FDAC6B /* SwiftSoup */,
+			);
 			productName = EpubGenApp;
 			productReference = 853E9E6B2499323600DBAC8B /* EpubGenApp.app */;
 			productType = "com.apple.product-type.application";
@@ -138,6 +146,9 @@
 				Base,
 			);
 			mainGroup = 853E9E622499323600DBAC8B;
+			packageReferences = (
+				681F2C6524A22E0600FDAC6B /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 853E9E6C2499323600DBAC8B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -166,11 +177,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681F2C6424A22C7600FDAC6B /* ColoredSpanGenerator.swift in Sources */,
+				683BCC9024A35AD4007E7833 /* ColoredSpanModels.swift in Sources */,
 				853E9E712499323600DBAC8B /* ViewController.swift in Sources */,
 				853E9E6F2499323600DBAC8B /* AppDelegate.swift in Sources */,
 				853E9E872499330700DBAC8B /* SmilGenerator.swift in Sources */,
 				853E9E8D249A99E500DBAC8B /* SRTGenerator.swift in Sources */,
-				853E9E85249932DB00DBAC8B /* SpanEnumerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +375,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		681F2C6524A22E0600FDAC6B /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		681F2C6624A22E0600FDAC6B /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 681F2C6524A22E0600FDAC6B /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 853E9E632499323600DBAC8B /* Project object */;
 }

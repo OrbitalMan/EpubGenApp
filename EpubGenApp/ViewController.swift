@@ -42,13 +42,14 @@ class ViewController: NSViewController {
         return TimingType(rawValue: selectedItemTitle) ?? .smil
     }
     
-    lazy var spanEnumerator = SpanEnumerator()
+    lazy var spanGenerator = ColoredSpanGenerator()
     lazy var smilGenerator = SmilGenerator()
     lazy var srtGenerator = SRTGenerator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         for textView in allTextViews {
+            textView.typingAttributes[.font] = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
             textView.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
             textView.delegate = self
         }
@@ -56,7 +57,7 @@ class ViewController: NSViewController {
             textField.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
             textField.delegate = self
         }
-        xhtmlOutput.string = spanEnumerator.output
+        xhtmlOutput.string = spanGenerator.output
         timingOutput.string = smilGenerator.output
     }
     
@@ -100,7 +101,7 @@ extension ViewController: NSTextViewDelegate {
     func textDidChange(_ notification: Notification) {
         switch notification.object as? NSTextView {
         case xhtmlInput:
-            xhtmlOutput.string = spanEnumerator.output(input: xhtmlInput.string)
+            xhtmlOutput.string = (try? spanGenerator.output(input: xhtmlInput.string)) ?? ""
         case timingInput:
             updateTiming()
         default:
