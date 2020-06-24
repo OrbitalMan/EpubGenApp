@@ -50,6 +50,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         for textView in allTextViews {
             textView.typingAttributes[.font] = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+            textView.typingAttributes[.foregroundColor] = NSColor.labelColor
             textView.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
             textView.delegate = self
         }

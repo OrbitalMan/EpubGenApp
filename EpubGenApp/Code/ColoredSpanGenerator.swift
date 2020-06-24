@@ -112,6 +112,9 @@ struct ColoredSpanGenerator {
                 currentGroup = [colored]
             }
         }
+        if !currentGroup.isEmpty, !currentColor.isEmpty {
+            coloredGroups.append(ColoredGroup(coloredSpans: currentGroup, color: currentColor))
+        }
         
         let wrappedSpans = try coloredGroups.compactMap(wrapIfNeeded(group:))
         return wrappedSpans
@@ -129,17 +132,17 @@ struct ColoredSpanGenerator {
         let spans = group.coloredSpans.map { $0.span }
         let (parent, matchingChildren) = try findCommonParent(of: spans)
         guard
-            let firstChild = matchingChildren.first,
-            let firstIndex = parent.children().firstIndex(of: firstChild) else
+            let lastChild = matchingChildren.last,
+            let lastIndex = parent.children().firstIndex(of: lastChild) else
         {
-            throw "Can't find first child"
+            throw "Can't find last child"
         }
         for child in matchingChildren {
             try parent.removeChild(child)
         }
         let wrappingSpan = Element(Tag("span"), parent.getBaseUri())
         try wrappingSpan.addChildren(Array(matchingChildren))
-        try parent.addChildren(firstIndex, wrappingSpan)
+        try parent.addChildren(lastIndex, wrappingSpan)
         return wrappingSpan
     }
     
