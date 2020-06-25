@@ -15,7 +15,7 @@ struct ColoredSpanGenerator {
     let simpleURL: URL = Bundle.main.url(forResource: "simple", withExtension: "xhtml")!
     
     var inputContents: String {
-        return try! String(contentsOf: simpleURL)
+        return try! String(contentsOf: paragraphURL)
     }
     
     var output: String {

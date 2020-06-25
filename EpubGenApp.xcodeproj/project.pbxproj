@@ -23,7 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		680264A724A4893E009A11A1 /* output.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = output.xhtml; sourceTree = "<group>"; };
+		680264A724A4893E009A11A1 /* output.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = text.xml; path = output.xhtml; sourceTree = "<group>"; tabWidth = 2; };
 		680264A924A48966009A11A1 /* simple.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = simple.xhtml; sourceTree = "<group>"; };
 		681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanGenerator.swift; sourceTree = "<group>"; };
 		683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanModels.swift; sourceTree = "<group>"; };
