@@ -23,9 +23,10 @@ struct ColoredSpanGenerator {
     }
     
     func output(input: String?) throws -> String {
-        guard let input = input else {
+        guard var input = input else {
             throw "input missing"
         }
+        input = removeUnwantedWhitespaces(in: input)
         let document = try SwiftSoup.parse(input)
         let coloredClasses = try findColoredClasses(in: document)
         let coloredElements = try findColoredElements(for: coloredClasses, in: document)
@@ -189,8 +190,8 @@ struct ColoredSpanGenerator {
                             (";background-color:#[a-fA-F0-9]{6}", ""),
                             ("background-color:#[a-fA-F0-9]{6}", "")]
         var newData = data
-        for (regExp, replacement) in replacementPairs {
-            newData = newData.replacingOccurrences(of: regExp,
+        for (pattern, replacement) in replacementPairs {
+            newData = newData.replacingOccurrences(of: pattern,
                                                    with: replacement,
                                                    options: .regularExpression)
         }
@@ -198,49 +199,41 @@ struct ColoredSpanGenerator {
     }
     
     private func removeUnwantedWhitespaces(in input: String) -> String {
+        
+        func getReplacementPairs(for tag: String) -> [(String, String)] {
+            return [(">(\\n+)(\\s*)<\(tag)",   "\n$2><\(tag)"),
+                    ("</\(tag)>(\\n+)(\\s*)<", "</\(tag)\n$2><"),
+                    ("([^\\s])><\(tag)",       "$1\n><\(tag)"),
+                    ("</\(tag)><", "</\(tag)\n><")]
+        }
+        
+        let tags = ["span", "sup", "a "]
+        var replacementPairs: [(String, String)] = []
+        for tag in tags {
+            replacementPairs.append(contentsOf: getReplacementPairs(for: tag))
+        }
         var output = input
-        
-        output = output.replacingOccurrences(of: ">(\\s*)\\n(\\s*)<span",
-                                             with: "\n$2><span",
-                                             options: .regularExpression)
-        output = output.replacingOccurrences(of: "</span>(\\s*)\\n(\\s*)<",
-                                             with: "</span\n$2><",
-                                             options: .regularExpression)
-        
-        output = output.replacingOccurrences(of: ">(\\s*)<span",
-                                             with: "><span",
-                                             options: .regularExpression)
-        output = output.replacingOccurrences(of: "</span>(\\s*)<",
-                                             with: "</span><",
-                                             options: .regularExpression)
-        
-        output = output.replacingOccurrences(of: ">(\\s*)<sup",
-                                             with: "><sup",
-                                             options: .regularExpression)
-        output = output.replacingOccurrences(of: "</sup>(\\s*)<",
-                                             with: "</sup><",
-                                             options: .regularExpression)
-        
-        output = output.replacingOccurrences(of: ">(\\s*)<a",
-                                             with: "><a",
-                                             options: .regularExpression)
-        output = output.replacingOccurrences(of: "</a>(\\s*)<",
-                                             with: "</a><",
-                                             options: .regularExpression)
-        
+        for (pattern, replacement) in replacementPairs {
+            output = output.replacingOccurrences(of: pattern,
+                                                 with: replacement,
+                                                 options: .regularExpression)
+        }
         return output
     }
     
     private func convertToXHTML(_ input: String) -> String {
+        let replacementPairs: [(String, String)]
+        replacementPairs = [("<!--\\?xml version=\"([0-9.]+)\" encoding=\"([a-zA-Z0-9-]+)\"\\?-->\\n?",
+                             "<?xml version=\"$1\" encoding=\"UTF-8\"?>"),
+                            ("<meta charset=\"([a-zA-Z0-9-]+)\">", "<meta charset=\"UTF-8\"/>"),
+                            ("&nbsp;", " "),
+                            ("<hr class=\"([a-zA-Z0-9-]+)\">", "<hr class=\"$1\"/>")]
         var output = input
-        output = output.replacingOccurrences(of: "<!--?xml version=\"1.0\" encoding=\"UTF-8\"?-->\n",
-                                             with: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        output = output.replacingOccurrences(of: "&nbsp;", with: " ")
-        output = output.replacingOccurrences(of: "<meta charset=\"UTF-8\">",
-                                             with: "<meta charset=\"UTF-8\"/>")
-        output = output.replacingOccurrences(of: "<hr class=\"([a-zA-Z0-9]+)\">",
-                                             with: "<hr class=\"$1\"/>",
-                                             options: .regularExpression)
+        for (pattern, replacement) in replacementPairs {
+            output = output.replacingOccurrences(of: pattern,
+                                                 with: replacement,
+                                                 options: .regularExpression)
+        }
         return output
     }
     
