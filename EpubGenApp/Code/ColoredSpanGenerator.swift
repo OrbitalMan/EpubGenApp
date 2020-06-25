@@ -11,10 +11,11 @@ import SwiftSoup
 
 struct ColoredSpanGenerator {
     
-    let inputURL: URL = Bundle.main.url(forResource: "paragraph", withExtension: "xhtml")!
+    let paragraphURL: URL = Bundle.main.url(forResource: "paragraph", withExtension: "xhtml")!
+    let simpleURL: URL = Bundle.main.url(forResource: "simple", withExtension: "xhtml")!
     
     var inputContents: String {
-        return try! String(contentsOf: inputURL)
+        return try! String(contentsOf: simpleURL)
     }
     
     var output: String {
@@ -87,7 +88,7 @@ struct ColoredSpanGenerator {
     }
     
     private func findColoredElements(for coloredClasses: [CSS],
-                             in document: Document) throws -> [Element] {
+                                     in document: Document) throws -> [Element] {
         let coloredSpans = try document.select("span, sup").compactMap { (span) -> ColoredSpan? in
             let spanClasses = try span.classNames()
             for colored in coloredClasses {
@@ -131,18 +132,16 @@ struct ColoredSpanGenerator {
         }
         let spans = group.coloredSpans.map { $0.span }
         let (parent, matchingChildren) = try findCommonParent(of: spans)
-        guard
-            let lastChild = matchingChildren.last,
-            let lastIndex = parent.children().firstIndex(of: lastChild) else
-        {
-            throw "Can't find last child"
+        guard let firstChild = matchingChildren.first else {
+            throw "Can't find first child"
         }
+        let insertionIndex = firstChild.siblingIndex
         for child in matchingChildren {
             try parent.removeChild(child)
         }
         let wrappingSpan = Element(Tag("span"), parent.getBaseUri())
         try wrappingSpan.addChildren(Array(matchingChildren))
-        try parent.addChildren(lastIndex, wrappingSpan)
+        try parent.addChildren(insertionIndex, wrappingSpan)
         return wrappingSpan
     }
     
@@ -184,10 +183,11 @@ struct ColoredSpanGenerator {
     private func eraseColors(in document: Document) throws {
         let style = try findStyleElement(in: document)
         let data = style.getWholeData()
-        let replacementPairs: [(String, String)] = [("^;background-color:#[a-fA-F0-9]{6};", ";"),
-                                                    ("background-color:#[a-fA-F0-9]{6};", ""),
-                                                    (";background-color:#[a-fA-F0-9]{6}", ""),
-                                                    ("background-color:#[a-fA-F0-9]{6}", "")]
+        let replacementPairs: [(String, String)]
+        replacementPairs = [(";background-color:#[a-fA-F0-9]{6};", ";"),
+                            ("\\{background-color:#[a-fA-F0-9]{6};", "{"),
+                            (";background-color:#[a-fA-F0-9]{6}", ""),
+                            ("background-color:#[a-fA-F0-9]{6}", "")]
         var newData = data
         for (regExp, replacement) in replacementPairs {
             newData = newData.replacingOccurrences(of: regExp,

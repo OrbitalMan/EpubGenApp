@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		680264A824A4893E009A11A1 /* output.xhtml in Resources */ = {isa = PBXBuildFile; fileRef = 680264A724A4893E009A11A1 /* output.xhtml */; };
+		680264AA24A48966009A11A1 /* simple.xhtml in Resources */ = {isa = PBXBuildFile; fileRef = 680264A924A48966009A11A1 /* simple.xhtml */; };
 		681F2C6424A22C7600FDAC6B /* ColoredSpanGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */; };
 		681F2C6724A22E0600FDAC6B /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 681F2C6624A22E0600FDAC6B /* SwiftSoup */; };
 		683BCC9024A35AD4007E7833 /* ColoredSpanModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		680264A724A4893E009A11A1 /* output.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = output.xhtml; sourceTree = "<group>"; };
+		680264A924A48966009A11A1 /* simple.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = simple.xhtml; sourceTree = "<group>"; };
 		681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanGenerator.swift; sourceTree = "<group>"; };
 		683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanModels.swift; sourceTree = "<group>"; };
 		853E9E6B2499323600DBAC8B /* EpubGenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpubGenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +52,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		680264A624A488C4009A11A1 /* Output */ = {
+			isa = PBXGroup;
+			children = (
+				680264A724A4893E009A11A1 /* output.xhtml */,
+			);
+			path = Output;
+			sourceTree = "<group>";
+		};
 		853E9E622499323600DBAC8B = {
 			isa = PBXGroup;
 			children = (
@@ -67,6 +79,7 @@
 		853E9E6D2499323600DBAC8B /* EpubGenApp */ = {
 			isa = PBXGroup;
 			children = (
+				680264A624A488C4009A11A1 /* Output */,
 				853E9E7E2499324F00DBAC8B /* Input */,
 				853E9E83249932AF00DBAC8B /* Code */,
 				853E9E702499323600DBAC8B /* ViewController.swift */,
@@ -82,6 +95,7 @@
 		853E9E7E2499324F00DBAC8B /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				680264A924A48966009A11A1 /* simple.xhtml */,
 				853E9E7F2499326700DBAC8B /* paragraph.xhtml */,
 				853E9E812499327300DBAC8B /* timings.txt */,
 			);
@@ -164,7 +178,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				853E9E822499327300DBAC8B /* timings.txt in Resources */,
+				680264A824A4893E009A11A1 /* output.xhtml in Resources */,
 				853E9E802499326700DBAC8B /* paragraph.xhtml in Resources */,
+				680264AA24A48966009A11A1 /* simple.xhtml in Resources */,
 				853E9E732499323D00DBAC8B /* Assets.xcassets in Resources */,
 				853E9E762499323D00DBAC8B /* Main.storyboard in Resources */,
 			);
