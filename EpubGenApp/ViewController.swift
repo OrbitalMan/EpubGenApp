@@ -102,7 +102,7 @@ extension ViewController: NSTextViewDelegate {
     func textDidChange(_ notification: Notification) {
         switch notification.object as? NSTextView {
         case xhtmlInput:
-            xhtmlOutput.string = (try? spanGenerator.output(input: xhtmlInput.string)) ?? ""
+            xhtmlOutput.string = spanGenerator.output(input: xhtmlInput.string)
         case timingInput:
             updateTiming()
         default:

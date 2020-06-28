@@ -144,9 +144,13 @@ extension String: Error {
         return ranges
     }
     
+    var range: Range<Index> {
+        return Range<Index>(uncheckedBounds: (lower: startIndex, upper: endIndex))
+    }
+    
     static let softHyphen = "\u{00AD}"
     
-    func softHyphenated(with locale: Locale) throws -> String {
+    func softHyphenated(hyphen: String = .softHyphen, with locale: Locale) throws -> String {
         guard locale.isHyphenationAvailable else {
             throw "Hyphenation isn't available for '\(locale.identifier)' locale"
         }
@@ -163,7 +167,7 @@ extension String: Error {
         }
         for i in (0..<string.length).reversed() {
             if hyphenationLocations[i] > 0 {
-                string.insert(String.softHyphen, at: i)
+                string.insert(hyphen, at: i)
             }
         }
         return string as String

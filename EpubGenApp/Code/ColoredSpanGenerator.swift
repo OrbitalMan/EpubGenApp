@@ -19,10 +19,18 @@ struct ColoredSpanGenerator {
     }
     
     var output: String {
-        return (try? output(input: inputContents)) ?? ""
+        return output(input: inputContents)
     }
     
-    func output(input: String?) throws -> String {
+    func output(input: String) -> String {
+        do {
+            return try getOutput(input: input)
+        } catch {
+            return "\(error)"
+        }
+    }
+    
+    private func getOutput(input: String?) throws -> String {
         guard var input = input else {
             throw "input missing"
         }
@@ -34,11 +42,8 @@ struct ColoredSpanGenerator {
         try identify(elements: coloredElements)
         try eraseColors(in: document)
         
-        var output = try document.html()
+        var output = try hyphenate(document)
         output = removeUnwantedWhitespaces(in: output)
-        output = convertToXHTML(output)
-        let locale = Locale(identifier: "uk-ua")
-        output = try output.softHyphenated(with: locale)
         return output
     }
     
@@ -200,28 +205,42 @@ struct ColoredSpanGenerator {
         style.setWholeData(newData)
     }
     
-    private func hyphenate(_ document: Document) throws {
+    private func hyphenate(_ document: Document,
+                           with hyphen: String = .softHyphen,
+                           locale: Locale = Locale(identifier: "uk-ua")) throws -> String {
         let textElements = try document.selectTextElements()
-        let locale = Locale(identifier: "uk-ua")
+        var output = try document.xhtml()
+        var searchRange = output.range
+        var hyphenationRanges: [(String, String, Range<String.Index>)] = []
         for element in textElements {
             guard element.hasText() else {
                 continue
             }
-            
-            // TODO: need to detect and revert trimming
             let text = element.ownText()
-            
             if text.isEmpty {
                 continue
             }
             if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 continue
             }
-            guard let hyphenatedText = try? text.softHyphenated(with: locale) else {
+            guard let range = output.range(of: text,
+                                           range: searchRange,
+                                           locale: locale) else
+            {
+                throw "couldn't find '\(text)' in document!"
+            }
+            searchRange = Range(uncheckedBounds: (lower: range.upperBound, upper: searchRange.upperBound))
+            guard let hyphenatedText = try? text.softHyphenated(hyphen: hyphen, with: locale) else {
                 continue
             }
-            try element.text(hyphenatedText)
+            hyphenationRanges.append((text, hyphenatedText, range))
         }
+        for (text, hyphenatedText, range) in hyphenationRanges.reversed() {
+            output = output.replacingOccurrences(of: text,
+                                                 with: hyphenatedText,
+                                                 range: range)
+        }
+        return output
     }
     
     private func removeUnwantedWhitespaces(in input: String) -> String {
@@ -247,7 +266,16 @@ struct ColoredSpanGenerator {
         return output
     }
     
-    private func convertToXHTML(_ input: String) -> String {
+}
+
+extension Document {
+    
+    func selectTextElements() throws -> Elements {
+        return try select("span, sup, a")
+    }
+    
+    func xhtml() throws -> String {
+        var output = try html()
         let replacementPairs: [(String, String)]
         replacementPairs = [("<!--\\?xml version=\"([0-9.]+)\" encoding=\"([a-zA-Z0-9-]+)\"\\?-->\\n?",
                              "<?xml version=\"$1\" encoding=\"UTF-8\"?>"),
@@ -306,21 +334,12 @@ struct ColoredSpanGenerator {
                             ("&szlig;", "ß"),
                             ("&Ntilde;", "Ñ"),
                             ("&ntilde;", "ñ")]
-        var output = input
         for (pattern, replacement) in replacementPairs {
             output = output.replacingOccurrences(of: pattern,
                                                  with: replacement,
                                                  options: .regularExpression)
         }
         return output
-    }
-    
-}
-
-extension Document {
-    
-    func selectTextElements() throws -> Elements {
-        return try select("span, sup, a")
     }
     
 }
