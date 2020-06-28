@@ -37,6 +37,8 @@ struct ColoredSpanGenerator {
         var output = try document.html()
         output = removeUnwantedWhitespaces(in: output)
         output = convertToXHTML(output)
+        let locale = Locale(identifier: "uk-ua")
+        output = try output.softHyphenated(with: locale)
         return output
     }
     
@@ -90,7 +92,7 @@ struct ColoredSpanGenerator {
     
     private func findColoredElements(for coloredClasses: [CSS],
                                      in document: Document) throws -> [Element] {
-        let coloredSpans = try document.select("span, sup").compactMap { (span) -> ColoredSpan? in
+        let coloredSpans = try document.selectTextElements().compactMap { (span) -> ColoredSpan? in
             let spanClasses = try span.classNames()
             for colored in coloredClasses {
                 if spanClasses.contains(colored.className) {
@@ -198,6 +200,30 @@ struct ColoredSpanGenerator {
         style.setWholeData(newData)
     }
     
+    private func hyphenate(_ document: Document) throws {
+        let textElements = try document.selectTextElements()
+        let locale = Locale(identifier: "uk-ua")
+        for element in textElements {
+            guard element.hasText() else {
+                continue
+            }
+            
+            // TODO: need to detect and revert trimming
+            let text = element.ownText()
+            
+            if text.isEmpty {
+                continue
+            }
+            if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                continue
+            }
+            guard let hyphenatedText = try? text.softHyphenated(with: locale) else {
+                continue
+            }
+            try element.text(hyphenatedText)
+        }
+    }
+    
     private func removeUnwantedWhitespaces(in input: String) -> String {
         
         func getReplacementPairs(for tag: String) -> [(String, String)] {
@@ -226,8 +252,60 @@ struct ColoredSpanGenerator {
         replacementPairs = [("<!--\\?xml version=\"([0-9.]+)\" encoding=\"([a-zA-Z0-9-]+)\"\\?-->\\n?",
                              "<?xml version=\"$1\" encoding=\"UTF-8\"?>"),
                             ("<meta charset=\"([a-zA-Z0-9-]+)\">", "<meta charset=\"UTF-8\"/>"),
-                            ("&nbsp;", " "),
-                            ("<hr class=\"([a-zA-Z0-9-]+)\">", "<hr class=\"$1\"/>")]
+                            ("<hr class=\"([a-zA-Z0-9-]+)\">", "<hr class=\"$1\"/>"),
+                            ("&amp;", "&"),
+                            ("&shy;", String.softHyphen),
+                            ("&quot;", "\""),
+                            ("&nbsp;", "\u{00A0}"),
+                            ("&lt;", "<"),
+                            ("&gt;", ">"),
+                            ("&sect;", "§"),
+                            ("&copy;", "©"),
+                            ("&laquo;", "«"),
+                            ("&raquo;", "»"),
+                            ("&reg;", "®"),
+                            ("&iexcl;", "¡"),
+                            ("&cent;", "¢"),
+                            ("&pound;", "£"),
+                            ("&curren;", "¤"),
+                            ("&yen;", "¥"),
+                            ("&brvbar;", "¦"),
+                            ("&uml;", "¨"),
+                            ("&ordf;", "ª"),
+                            ("&not;", "¬"),
+                            ("&macr;", "¯"),
+                            ("&deg;", "°"),
+                            ("&plusmn;", "±"),
+                            ("&sup2;", "²"),
+                            ("&sup3;", "³"),
+                            ("&acute;", "´"),
+                            ("&micro;", "µ"),
+                            ("&para;", "¶"),
+                            ("&middot;", "·"),
+                            ("&cedil;", "¸"),
+                            ("&sup1;", "¹"),
+                            ("&ordm;", "º"),
+                            ("&frac14;", "¼"),
+                            ("&frac12;", "½"),
+                            ("&frac34;", "¾"),
+                            ("&iquest;", "¿"),
+                            ("&times;", "×"),
+                            ("&divide;", "÷"),
+                            ("&ETH;", "Ð"),
+                            ("&eth;", "ð"),
+                            ("&THORN;", "Þ"),
+                            ("&thorn;", "þ"),
+                            ("&AElig;", "Æ"),
+                            ("&aelig;", "æ"),
+                            ("&OElig;", "Œ"),
+                            ("&oelig;", "œ"),
+                            ("&Aring;", "Å"),
+                            ("&Oslash;", "Ø"),
+                            ("&Ccedil;", "Ç"),
+                            ("&ccedil;", "ç"),
+                            ("&szlig;", "ß"),
+                            ("&Ntilde;", "Ñ"),
+                            ("&ntilde;", "ñ")]
         var output = input
         for (pattern, replacement) in replacementPairs {
             output = output.replacingOccurrences(of: pattern,
@@ -235,6 +313,14 @@ struct ColoredSpanGenerator {
                                                  options: .regularExpression)
         }
         return output
+    }
+    
+}
+
+extension Document {
+    
+    func selectTextElements() throws -> Elements {
+        return try select("span, sup, a")
     }
     
 }

@@ -144,5 +144,38 @@ extension String: Error {
         return ranges
     }
     
+    static let softHyphen = "\u{00AD}"
+    
+    func softHyphenated(with locale: Locale) throws -> String {
+        guard locale.isHyphenationAvailable else {
+            throw "Hyphenation isn't available for '\(locale.identifier)' locale"
+        }
+        let string: NSMutableString = NSMutableString(string: self)
+        var hyphenationLocations = [CUnsignedChar](repeating: 0, count: Int(string.length))
+        let range: CFRange = CFRangeMake(0, string.length)
+        let cfLocale = locale as CFLocale
+        for i in 0..<string.length {
+            let location = CFStringGetHyphenationLocationBeforeIndex(string, i, range, 0, cfLocale, nil)
+            if(location >= 0 && location < string.length)
+            {
+                hyphenationLocations[location] = 1;
+            }
+        }
+        for i in (0..<string.length).reversed() {
+            if hyphenationLocations[i] > 0 {
+                string.insert(String.softHyphen, at: i)
+            }
+        }
+        return string as String
+    }
+    
+}
+
+extension Locale {
+    
+    var isHyphenationAvailable: Bool {
+        return CFStringIsHyphenationAvailableForLocale(self as CFLocale)
+    }
+    
 }
 
