@@ -42,7 +42,7 @@ struct ColoredSpanGenerator {
         try identify(elements: coloredElements)
         try eraseColors(in: document)
         
-        var output = try hyphenate(document)
+        var output = try hyphenate(document, with: .softHyphen)
         output = removeUnwantedWhitespaces(in: output)
         return output
     }
@@ -230,7 +230,7 @@ struct ColoredSpanGenerator {
                 throw "couldn't find '\(text)' in document!"
             }
             searchRange = Range(uncheckedBounds: (lower: range.upperBound, upper: searchRange.upperBound))
-            guard let hyphenatedText = try? text.softHyphenated(hyphen: hyphen, with: locale) else {
+            guard let hyphenatedText = try? text.hyphenated(with: hyphen, locale: locale) else {
                 continue
             }
             hyphenationRanges.append((text, hyphenatedText, range))
@@ -252,7 +252,7 @@ struct ColoredSpanGenerator {
                     ("</\(tag)><", "</\(tag)\n><")]
         }
         
-        let tags = ["span", "sup", "a "]
+        let tags = ["span", "sup", "a"]
         var replacementPairs: [(String, String)] = []
         for tag in tags {
             replacementPairs.append(contentsOf: getReplacementPairs(for: tag))

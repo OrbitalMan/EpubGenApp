@@ -150,7 +150,8 @@ extension String: Error {
     
     static let softHyphen = "\u{00AD}"
     
-    func softHyphenated(hyphen: String = .softHyphen, with locale: Locale) throws -> String {
+    func hyphenated(with hyphen: String = .softHyphen,
+                    locale: Locale) throws -> String {
         guard locale.isHyphenationAvailable else {
             throw "Hyphenation isn't available for '\(locale.identifier)' locale"
         }
