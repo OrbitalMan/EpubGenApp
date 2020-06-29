@@ -12,6 +12,7 @@
 		681F2C6424A22C7600FDAC6B /* ColoredSpanGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */; };
 		681F2C6724A22E0600FDAC6B /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 681F2C6624A22E0600FDAC6B /* SwiftSoup */; };
 		683BCC9024A35AD4007E7833 /* ColoredSpanModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */; };
+		68D4991824AA834400535A44 /* FileManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D4991724AA834400535A44 /* FileManagerExtension.swift */; };
 		853E9E6F2499323600DBAC8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E6E2499323600DBAC8B /* AppDelegate.swift */; };
 		853E9E712499323600DBAC8B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E9E702499323600DBAC8B /* ViewController.swift */; };
 		853E9E732499323D00DBAC8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 853E9E722499323D00DBAC8B /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 		680264A924A48966009A11A1 /* simple.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = simple.xhtml; sourceTree = "<group>"; };
 		681F2C6324A22C7600FDAC6B /* ColoredSpanGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanGenerator.swift; sourceTree = "<group>"; };
 		683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredSpanModels.swift; sourceTree = "<group>"; };
+		68D4991724AA834400535A44 /* FileManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtension.swift; sourceTree = "<group>"; };
 		853E9E6B2499323600DBAC8B /* EpubGenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpubGenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853E9E6E2499323600DBAC8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		853E9E702499323600DBAC8B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				683BCC8F24A35AD4007E7833 /* ColoredSpanModels.swift */,
 				853E9E862499330700DBAC8B /* SmilGenerator.swift */,
 				853E9E8C249A99E500DBAC8B /* SRTGenerator.swift */,
+				68D4991724AA834400535A44 /* FileManagerExtension.swift */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 			files = (
 				681F2C6424A22C7600FDAC6B /* ColoredSpanGenerator.swift in Sources */,
 				683BCC9024A35AD4007E7833 /* ColoredSpanModels.swift in Sources */,
+				68D4991824AA834400535A44 /* FileManagerExtension.swift in Sources */,
 				853E9E712499323600DBAC8B /* ViewController.swift in Sources */,
 				853E9E6F2499323600DBAC8B /* AppDelegate.swift in Sources */,
 				853E9E872499330700DBAC8B /* SmilGenerator.swift in Sources */,

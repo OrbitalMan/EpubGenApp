@@ -8,120 +8,191 @@
 
 import Cocoa
 
-enum TimingType: String, CaseIterable {
-    case smil = "SMIL"
-    case srt = "SRT"
-}
-
 class ViewController: NSViewController {
     
-    @IBOutlet weak var xhtmlInput: NSTextView!
-    @IBOutlet weak var timingTypePicker: NSPopUpButton!
-    @IBOutlet weak var smilTextSourceInput: NSTextField!
-    @IBOutlet weak var smilAudioSourceInput: NSTextField!
     @IBOutlet weak var timingOffsetInput: NSTextField!
-    @IBOutlet weak var timingInput: NSTextView!
-    @IBOutlet weak var xhtmlOutput: NSTextView!
-    @IBOutlet weak var timingOutput: NSTextView!
+    @IBOutlet weak var inputEpubFolderPickerField: NSTextField!
+    @IBOutlet weak var inputAudioFilePickerField: NSTextField!
+    @IBOutlet weak var inputTimingFilePickerField: NSTextField!
+    @IBOutlet weak var outputFileNameField: NSTextField!
+    @IBOutlet weak var outputTitleField: NSTextField!
+    @IBOutlet weak var composeButton: NSButton!
     
-    var allTextViews: [NSTextView] {
-        return [xhtmlInput,
-                xhtmlOutput,
-                timingInput,
-                timingOutput].compactMap { $0 }
+    var inputEpubFolderURL: URL? {
+        didSet {
+            inputEpubFolderPickerField.stringValue = inputEpubFolderURL?.path ?? ""
+            outputFileName = inputEpubFolderURL?.lastPathComponent
+        }
     }
     
-    var allTextFields: [NSTextField] {
-        return [smilTextSourceInput,
-                smilAudioSourceInput,
-                timingOffsetInput].compactMap { $0 }
+    var inputAudioFileURL: URL? {
+        didSet {
+            inputAudioFilePickerField.stringValue = inputAudioFileURL?.path ?? ""
+        }
     }
     
-    var timingType: TimingType {
-        guard let selectedItemTitle = timingTypePicker?.titleOfSelectedItem else { return .smil }
-        return TimingType(rawValue: selectedItemTitle) ?? .smil
+    var inputTimingFileURL: URL? {
+        didSet {
+            inputTimingFilePickerField.stringValue = inputTimingFileURL?.path ?? ""
+        }
     }
     
+    var outputFileName: String? {
+        get {
+            let fileName = outputFileNameField?.stringValue ?? ""
+            if fileName.isEmpty { return nil }
+            return fileName
+        } set {
+            outputFileNameField?.stringValue = newValue ?? ""
+        }
+    }
+    
+    var outputTitle: String? {
+        get {
+            let title = outputTitleField?.stringValue ?? ""
+            if title.isEmpty { return nil }
+            return title
+        } set {
+            outputTitleField?.stringValue = newValue ?? ""
+        }
+    }
+    
+    let fileManager = FileManager.default
     lazy var spanGenerator = ColoredSpanGenerator()
     lazy var smilGenerator = SmilGenerator()
     lazy var srtGenerator = SRTGenerator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for textView in allTextViews {
-            textView.typingAttributes[.font] = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-            textView.typingAttributes[.foregroundColor] = NSColor.labelColor
-            textView.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-            textView.delegate = self
-        }
-        for textField in allTextFields {
-            textField.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-            textField.delegate = self
-        }
-        xhtmlOutput.string = spanGenerator.output
-        timingOutput.string = smilGenerator.output
+        
     }
     
-    @IBAction func timingTypePicked(_ sender: NSPopUpButton) {
-        switch timingType {
-        case .smil:
-            smilTextSourceInput.isEnabled = true
-            smilAudioSourceInput.isEnabled = true
-        case .srt:
-            smilTextSourceInput.isEnabled = false
-            smilAudioSourceInput.isEnabled = false
-        }
-        updateTiming()
-    }
-    
-    func updateTiming() {
-        switch timingType {
-        case .smil:
-            updateSmil()
-        case .srt:
-            updateSRT()
-        }
-    }
-    
-    func updateSmil() {
-        timingOutput.string = smilGenerator.smil(from: timingInput.string,
-                                                 textPath: smilTextSourceInput.stringValue,
-                                                 audioPath: smilAudioSourceInput.stringValue,
-                                                 offset: timingOffsetInput.doubleValue)
-    }
-    
-    func updateSRT() {
-        timingOutput.string = srtGenerator.srt(from: timingInput.string,
-                                               offset: timingOffsetInput.doubleValue)
-    }
-    
-}
-
-extension ViewController: NSTextViewDelegate {
-    
-    func textDidChange(_ notification: Notification) {
-        switch notification.object as? NSTextView {
-        case xhtmlInput:
-            xhtmlOutput.string = spanGenerator.output(input: xhtmlInput.string)
-        case timingInput:
-            updateTiming()
-        default:
-            break
-        }
-    }
-    
-}
-
-extension ViewController: NSTextFieldDelegate {
-    
-    func controlTextDidChange(_ obj: Notification) {
-        guard
-            let textField = obj.object as? NSTextField,
-            allTextFields.contains(textField) else
-        {
+    @IBAction func enteredInputEpubFolder(_ sender: Any) {
+        if inputEpubFolderPickerField.stringValue.isEmpty {
             return
         }
-        updateTiming()
+        let url = URL(fileURLWithPath: inputEpubFolderPickerField.stringValue, isDirectory: true)
+        if fileManager.directoryExists(atPath: url.path) {
+            inputEpubFolderURL = url
+        } else {
+            inputEpubFolderURL = inputEpubFolderURL?.absoluteURL
+        }
+    }
+    
+    @IBAction func browseInputEpubFolder(_ sender: Any) {
+        let inputFolderPicker = NSOpenPanel()
+        inputFolderPicker.title                   = inputEpubFolderPickerField.placeholderString
+        inputFolderPicker.showsResizeIndicator    = true
+        inputFolderPicker.showsHiddenFiles        = false
+        inputFolderPicker.allowsMultipleSelection = false
+        inputFolderPicker.canChooseDirectories    = true
+        inputFolderPicker.canChooseFiles          = false
+        
+        let pickerResponse = inputFolderPicker.runModal()
+        if pickerResponse == .OK {
+            if let url = inputFolderPicker.url {
+                inputEpubFolderURL = url
+            }
+        } else {
+            // print("inputFolderPicker response:", pickerResponse)
+        }
+    }
+    
+    @IBAction func enteredInputAudioFile(_ sender: Any) {
+        let url = URL(fileURLWithPath: inputAudioFilePickerField.stringValue, isDirectory: false)
+        if fileManager.fileNotDirectoryExists(atPath: url.path) {
+            inputAudioFileURL = url
+        } else {
+            inputAudioFileURL = inputAudioFileURL?.absoluteURL
+        }
+    }
+    
+    @IBAction func browseInputAudioFile(_ sender: Any) {
+        let inputAudioFilePicker = NSOpenPanel()
+        inputAudioFilePicker.title                   = inputAudioFilePickerField.placeholderString
+        inputAudioFilePicker.showsResizeIndicator    = true
+        inputAudioFilePicker.showsHiddenFiles        = false
+        inputAudioFilePicker.allowsMultipleSelection = false
+        inputAudioFilePicker.canChooseDirectories    = false
+        inputAudioFilePicker.canChooseFiles          = true
+        inputAudioFilePicker.allowedFileTypes        = ["mp3"]
+        
+        let pickerResponse = inputAudioFilePicker.runModal()
+        if pickerResponse == .OK {
+            if let url = inputAudioFilePicker.url {
+                inputAudioFileURL = url
+            }
+        } else {
+            // print("inputAudioFilePicker response:", pickerResponse)
+        }
+    }
+    
+    @IBAction func enteredInputTimingFile(_ sender: Any) {
+        let url = URL(fileURLWithPath: inputTimingFilePickerField.stringValue, isDirectory: false)
+        if fileManager.fileNotDirectoryExists(atPath: url.path) {
+            inputTimingFileURL = url
+        } else {
+            inputTimingFileURL = inputTimingFileURL?.absoluteURL
+        }
+    }
+    
+    @IBAction func browseInputTimingFile(_ sender: Any) {
+        let inputTimingFilePicker = NSOpenPanel()
+        inputTimingFilePicker.title                   = inputTimingFilePickerField.placeholderString
+        inputTimingFilePicker.showsResizeIndicator    = true
+        inputTimingFilePicker.showsHiddenFiles        = false
+        inputTimingFilePicker.allowsMultipleSelection = false
+        inputTimingFilePicker.canChooseDirectories    = false
+        inputTimingFilePicker.canChooseFiles          = true
+        
+        let pickerResponse = inputTimingFilePicker.runModal()
+        if pickerResponse == .OK {
+            if let url = inputTimingFilePicker.url {
+                inputTimingFileURL = url
+            }
+        } else {
+            // print("inputTimingFilePicker response:", pickerResponse)
+        }
+    }
+    
+    @IBAction func composeEpub(_ sender: Any) {
+        guard
+            let inputEpubFolderURL = inputEpubFolderURL,
+            let inputAudioFileURL = inputAudioFileURL,
+            let inputTimingFileURL = inputTimingFileURL,
+            let outputFileName = outputFileName,
+            let outputTitle = outputTitle else
+        {
+            view.window?.shake()
+            return
+        }
+        print("all set up")
+    }
+    
+}
+
+extension NSWindow {
+    
+    func shake(times: Int = 3,
+               with offset: CGFloat = 8,
+               duration: Double = 0.6) {
+        let frame = self.frame
+        let shakeAnimation = CAKeyframeAnimation()
+        
+        let shakePath = CGMutablePath()
+        shakePath.move(to: CGPoint(x: NSMinX(frame), y: NSMinY(frame)))
+        
+        for _ in 0...times-1 {
+            shakePath.addLine(to: CGPoint(x: NSMinX(frame) - offset, y: NSMinY(frame)))
+            shakePath.addLine(to: CGPoint(x: NSMinX(frame) + offset, y: NSMinY(frame)))
+        }
+        
+        shakePath.closeSubpath()
+        shakeAnimation.path = shakePath
+        shakeAnimation.duration = duration
+        
+        animations = [NSAnimatablePropertyKey("frameOrigin") : shakeAnimation]
+        animator().setFrameOrigin(NSPoint(x: frame.minX, y: frame.minY))
     }
     
 }
