@@ -57,6 +57,20 @@ class ViewController: NSViewController {
         }
     }
     
+    var outputEpubFolderURL: URL? {
+        guard
+            let inputEpubFolderURL = inputEpubFolderURL,
+            let outputFileName = outputFileName else
+        {
+            return nil
+        }
+        let outputEpubFolderURL = inputEpubFolderURL
+            .deletingLastPathComponent()
+            .appendingPathComponent("generated")
+            .appendingPathComponent(outputFileName)
+        return outputEpubFolderURL
+    }
+    
     let fileManager = FileManager.default
     lazy var epubComposer = EpubComposer()
     
@@ -160,12 +174,24 @@ class ViewController: NSViewController {
                                      inputTimingFileURL: inputTimingFileURL,
                                      inputTimingOffset: inputTimingOffsetField.doubleValue,
                                      outputFileName: outputFileName,
-                                     outputTitle: outputTitle)
+                                     outputTitle: outputTitle,
+                                     outputEpubFolderURL: outputEpubFolderURL)
         } catch {
             view.window?.shake()
             print("composeEpub error:", error)
             print(" ")
         }
+    }
+    
+    @IBAction func showGeneratedInFinder(_ sender: Any) {
+        guard
+            let outputEpubFolderURL = outputEpubFolderURL,
+            fileManager.fileExists(atPath: outputEpubFolderURL.path) else
+        {
+            view.window?.shake()
+            return
+        }
+        NSWorkspace.shared.activateFileViewerSelecting([outputEpubFolderURL])
     }
     
 }

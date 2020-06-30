@@ -28,6 +28,7 @@ extension FileManager {
     }
     
     func removeIfExists(at url: URL) {
+        guard fileExists(atPath: url.path) else { return }
         do {
             try removeItem(at: url)
         } catch {

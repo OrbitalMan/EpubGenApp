@@ -19,7 +19,8 @@ class EpubComposer {
                  inputTimingFileURL: URL?,
                  inputTimingOffset: TimeInterval,
                  outputFileName: String?,
-                 outputTitle: String?) throws {
+                 outputTitle: String?,
+                 outputEpubFolderURL: URL?) throws {
         guard let inputEpubFolderURL = inputEpubFolderURL else {
             throw "inputEpubFolderURL is missing"
         }
@@ -35,11 +36,9 @@ class EpubComposer {
         guard let outputTitle = outputTitle else {
             throw "outputTitle is missing"
         }
-        
-        let outputEpubFolderURL = inputEpubFolderURL
-            .deletingLastPathComponent()
-            .appendingPathComponent("generated")
-            .appendingPathComponent(outputFileName)
+        guard let outputEpubFolderURL = outputEpubFolderURL else {
+            throw "outputEpubFolderURL is missing"
+        }
         fileManager.removeIfExists(at: outputEpubFolderURL)
         
         try fileManager.createDirectory(at: outputEpubFolderURL,

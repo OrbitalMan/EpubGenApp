@@ -862,16 +862,39 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ctR-em-3QL">
-                                                <rect key="frame" x="133" y="-7" width="98" height="32"/>
-                                                <buttonCell key="cell" type="push" title="Compose" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="esx-Y4-dHG">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="composeEpub:" target="XfG-lQ-9wD" id="W9l-Wd-PgX"/>
-                                                </connections>
-                                            </button>
+                                            <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZF-fT-gph">
+                                                <rect key="frame" x="75" y="0.0" width="214" height="21"/>
+                                                <subviews>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ctR-em-3QL">
+                                                        <rect key="frame" x="-6" y="-7" width="98" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Compose" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="esx-Y4-dHG">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="composeEpub:" target="XfG-lQ-9wD" id="W9l-Wd-PgX"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YyC-oL-CUC">
+                                                        <rect key="frame" x="90" y="-7" width="130" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Show in Finder" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="O6Z-Qp-iK0">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="showGeneratedInFinder:" target="XfG-lQ-9wD" id="pKA-fg-kL7"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                </visibilityPriorities>
+                                                <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                </customSpacing>
+                                            </stackView>
                                         </subviews>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
