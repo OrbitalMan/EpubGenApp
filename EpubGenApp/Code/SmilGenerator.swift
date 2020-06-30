@@ -92,5 +92,13 @@ extension DateFormatter {
         return dateFormatter
     }()
     
+    static let packageFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.defaultDate = smilReferenceDate
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.dateFormat = "HH:mm:ss.SSS"
+        return dateFormatter
+    }()
+    
 }
 

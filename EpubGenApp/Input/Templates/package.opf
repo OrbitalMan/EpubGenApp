@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="3.0">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dc:identifier id="uid">$#uid#$</dc:identifier>
+        <dc:language>uk-UA</dc:language>
+        <dc:title>$#outputTitle#$</dc:title>
+        <meta property="dcterms:modified">$#modifiedDate#$</meta>
+        <meta property="media:duration" refines="#smil">$#mediaDuration#$</meta>
+        <meta property="media:duration">$#mediaDuration#$</meta>
+        <meta property="media:active-class">-epub-media-overlay-active</meta>
+    </metadata>
+    <manifest>
+        <item id="toc" href="Text/nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+        <item id="main" href="Text/$#outputFileName#$.xhtml" media-type="application/xhtml+xml" media-overlay="smil"/>
+        <item id="smil" href="Text/$#outputFileName#$.xhtml.smil" media-type="application/smil+xml"/>
+        <item id="audio" href="Audio/$#outputFileName#$.mp3" media-type="audio/mpeg"/>
+    </manifest>
+    <spine>
+        <itemref idref="main"/>
+    </spine>
+</package>

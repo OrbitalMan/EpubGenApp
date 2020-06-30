@@ -10,10 +10,10 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-    @IBOutlet weak var timingOffsetInput: NSTextField!
     @IBOutlet weak var inputEpubFolderPickerField: NSTextField!
     @IBOutlet weak var inputAudioFilePickerField: NSTextField!
     @IBOutlet weak var inputTimingFilePickerField: NSTextField!
+    @IBOutlet weak var inputTimingOffsetField: NSTextField!
     @IBOutlet weak var outputFileNameField: NSTextField!
     @IBOutlet weak var outputTitleField: NSTextField!
     @IBOutlet weak var composeButton: NSButton!
@@ -58,9 +58,7 @@ class ViewController: NSViewController {
     }
     
     let fileManager = FileManager.default
-    lazy var spanGenerator = ColoredSpanGenerator()
-    lazy var smilGenerator = SmilGenerator()
-    lazy var srtGenerator = SRTGenerator()
+    lazy var epubComposer = EpubComposer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,17 +154,18 @@ class ViewController: NSViewController {
     }
     
     @IBAction func composeEpub(_ sender: Any) {
-        guard
-            let inputEpubFolderURL = inputEpubFolderURL,
-            let inputAudioFileURL = inputAudioFileURL,
-            let inputTimingFileURL = inputTimingFileURL,
-            let outputFileName = outputFileName,
-            let outputTitle = outputTitle else
-        {
+        do {
+            try epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
+                                     inputAudioFileURL: inputAudioFileURL,
+                                     inputTimingFileURL: inputTimingFileURL,
+                                     inputTimingOffset: inputTimingOffsetField.doubleValue,
+                                     outputFileName: outputFileName,
+                                     outputTitle: outputTitle)
+        } catch {
             view.window?.shake()
-            return
+            print("composeEpub error:", error)
+            print(" ")
         }
-        print("all set up")
     }
     
 }

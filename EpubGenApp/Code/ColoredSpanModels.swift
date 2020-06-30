@@ -103,6 +103,32 @@ extension String: Error {
         return "(?:\(str1))(.*?)(?:\(str2))"
     }
     
+    func matches(for regex: String) -> [NSTextCheckingResult] {
+        do {
+            let regex = try NSRegularExpression(pattern: regex)
+            let results = regex.matches(in: self,
+                                        range: NSRange(startIndex..., in: self))
+            return results
+        } catch {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    func findSubstrings(between subString1: String,
+                        and subString2: String,
+                        exclusive: Bool = true) -> [String] {
+        let matches = self.matches(for: regExpDetectingSubstring(between: subString1, and: subString2))
+        if exclusive {
+            return matches.map {
+                String(self[Range($0.range(at: 1), in: self)!])
+            }
+        }
+        return matches.map {
+            String(self[Range($0.range, in: self)!])
+        }
+    }
+    
     func replacingOccurrences(from subString1: String,
                               to subString2: String,
                               with replacement: String) -> String {

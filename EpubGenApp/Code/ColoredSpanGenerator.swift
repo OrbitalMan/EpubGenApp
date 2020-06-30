@@ -30,7 +30,7 @@ struct ColoredSpanGenerator {
         }
     }
     
-    private func getOutput(input: String?) throws -> String {
+    func getOutput(input: String?, title: String = "") throws -> String {
         guard var input = input else {
             throw "input missing"
         }
@@ -39,6 +39,9 @@ struct ColoredSpanGenerator {
         let coloredClasses = try findColoredClasses(in: document)
         let coloredElements = try findColoredElements(for: coloredClasses, in: document)
         
+        if !title.isEmpty {
+            try document.title(title)
+        }
         try identify(elements: coloredElements)
         try eraseColors(in: document)
         

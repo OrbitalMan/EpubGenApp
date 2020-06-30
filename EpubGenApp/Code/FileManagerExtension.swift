@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 extension FileManager {
     
@@ -24,6 +25,43 @@ extension FileManager {
             return !isDir.boolValue
         }
         return false
+    }
+    
+    func removeIfExists(at url: URL) {
+        do {
+            try removeItem(at: url)
+        } catch {
+            print("removeIfExists error:", error)
+            print(" ")
+        }
+    }
+    
+    func createFile(from string: String,
+                    directoryURL url: URL,
+                    name: String,
+                    fileExtension: String? = nil) throws {
+        var url = url.appendingPathComponent(name)
+        if let fileExtension = fileExtension {
+            url = url.appendingPathExtension(fileExtension)
+        }
+        let data = Data(string.utf8)
+        let created = createFile(atPath: url.path,
+                                 contents: data,
+                                 attributes: nil)
+        if !created {
+            throw "Failed to create a file at \(url)"
+        }
+    }
+    
+    func duration(for url: URL) throws -> TimeInterval {
+        guard fileNotDirectoryExists(atPath: url.path) else {
+            throw "duration: \(url) is missing"
+        }
+        guard url.pathExtension == "mp3" else {
+            throw "duration: \(url) expected to be .mp3"
+        }
+        let asset = AVURLAsset(url: url)
+        return Double(CMTimeGetSeconds(asset.duration))
     }
     
 }
