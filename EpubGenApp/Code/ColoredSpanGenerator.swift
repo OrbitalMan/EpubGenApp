@@ -44,6 +44,7 @@ struct ColoredSpanGenerator {
         }
         try identify(elements: coloredElements)
         try eraseColors(in: document)
+        try wrapInSection(document: document)
         
         var output = try hyphenate(document, with: .softHyphen)
         output = removeUnwantedWhitespaces(in: output)
@@ -154,6 +155,24 @@ struct ColoredSpanGenerator {
         try wrappingSpan.addChildren(Array(matchingChildren))
         try parent.addChildren(insertionIndex, wrappingSpan)
         return wrappingSpan
+    }
+    
+    private func wrapInSection(document: Document) throws {
+        guard let body = document.body() else {
+            throw "body is missig"
+        }
+        let children = body.children()
+        guard let firstChild = children.first else {
+            throw "Can't find first child"
+        }
+        let insertionIndex = firstChild.siblingIndex
+        for child in children {
+            try body.removeChild(child)
+        }
+        let section = Element.init(Tag("section"), body.getBaseUri())
+        try section.attr("epub:type", "bodymatter chapter")
+        try section.addChildren(Array(children))
+        try body.addChildren(insertionIndex, section)
     }
     
     private func findCommonParent(of elements: [Element]) throws -> (Element, [Element]) {
