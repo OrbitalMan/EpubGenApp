@@ -294,6 +294,30 @@ struct ColoredSpanGenerator {
         return output
     }
     
+    static func parseTitle(from inputEpubFolder: URL?) throws -> String {
+        guard let inputEpubFolder = inputEpubFolder else {
+            throw "inputEpubFolder url is missing"
+        }
+        let inputXHTMLFileURL = inputEpubFolder
+            .appendingPathComponent("GoogleDoc")
+            .appendingPathComponent(inputEpubFolder.lastPathComponent)
+            .appendingPathExtension("xhtml")
+        let xhtmlString = try String(contentsOf: inputXHTMLFileURL)
+        let document = try SwiftSoup.parse(xhtmlString)
+        guard let body = document.body() else {
+            throw "body is missing"
+        }
+        guard let firstSpan = try body.select("span").first() else {
+            throw "firstSpan is missing"
+        }
+        var title = try firstSpan.text()
+        title = title.replacingOccurrences(of: "§ \\d+. ", with: "", options: .regularExpression)
+        if title.suffix(1) == "." {
+            title = String(title.dropLast())
+        }
+        return title
+    }
+    
 }
 
 extension Document {

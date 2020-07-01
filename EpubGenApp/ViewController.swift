@@ -22,6 +22,9 @@ class ViewController: NSViewController {
         didSet {
             inputEpubFolderPickerField.stringValue = inputEpubFolderURL?.path ?? ""
             outputFileName = inputEpubFolderURL?.lastPathComponent
+            if let parsedTitle = try? ColoredSpanGenerator.parseTitle(from: inputEpubFolderURL) {
+                outputTitle = parsedTitle
+            }
         }
     }
     
@@ -158,6 +161,7 @@ class ViewController: NSViewController {
         inputTimingFilePicker.allowsMultipleSelection = false
         inputTimingFilePicker.canChooseDirectories    = false
         inputTimingFilePicker.canChooseFiles          = true
+        inputTimingFilePicker.allowedFileTypes        = ["txt"]
         
         let pickerResponse = inputTimingFilePicker.runModal()
         if pickerResponse == .OK {
