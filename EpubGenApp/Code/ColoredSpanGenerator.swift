@@ -159,7 +159,10 @@ struct ColoredSpanGenerator {
     
     private func wrapInSection(document: Document) throws {
         guard let body = document.body() else {
-            throw "body is missig"
+            throw "body is missing"
+        }
+        guard let htmlTag = try document.select("html").first() else {
+            throw "htmlTag is missing"
         }
         let children = body.children()
         guard let firstChild = children.first else {
@@ -169,6 +172,9 @@ struct ColoredSpanGenerator {
         for child in children {
             try body.removeChild(child)
         }
+        try htmlTag.attr("xmlns:epub", "http://www.idpf.org/2007/ops")
+        try htmlTag.attr("lang", "uk-UA")
+        try htmlTag.attr("xml:lang", "uk-UA")
         let section = Element.init(Tag("section"), body.getBaseUri())
         try section.attr("epub:type", "bodymatter chapter")
         try section.addChildren(Array(children))
@@ -300,7 +306,7 @@ extension Document {
         var output = try html()
         let replacementPairs: [(String, String)]
         replacementPairs = [("<!--\\?xml version=\"([0-9.]+)\" encoding=\"([a-zA-Z0-9-]+)\"\\?-->\\n?",
-                             "<?xml version=\"$1\" encoding=\"UTF-8\"?>"),
+                             "<?xml version=\"$1\" encoding=\"UTF-8\"?>\n"),
                             ("<meta charset=\"([a-zA-Z0-9-]+)\">", "<meta charset=\"UTF-8\"/>"),
                             ("<hr class=\"([a-zA-Z0-9-]+)\">", "<hr class=\"$1\"/>"),
                             ("&amp;", "&"),

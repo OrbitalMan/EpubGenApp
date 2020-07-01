@@ -76,7 +76,9 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // let gen = ColoredSpanGenerator()
+        // let out = gen.output(input: gen.inputContents)
+        // print(out)
     }
     
     @IBAction func enteredInputEpubFolder(_ sender: Any) {
