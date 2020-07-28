@@ -707,11 +707,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="EpubGenApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="2246" height="178"/>
+                        <rect key="frame" x="0.0" y="0.0" width="2246" height="815"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kiC-AB-oLa">
-                                <rect key="frame" x="10" y="57" width="2226" height="111"/>
+                                <rect key="frame" x="10" y="694" width="2226" height="111"/>
                                 <subviews>
                                     <stackView distribution="fillProportionally" orientation="horizontal" alignment="centerY" spacing="20" horizontalStackHuggingPriority="1000" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IfT-PM-YvI">
                                         <rect key="frame" x="0.0" y="28" width="2226" height="83"/>
@@ -940,6 +940,9 @@
                                     </stackView>
                                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="aGh-5H-Y11">
                                         <rect key="frame" x="1085" y="0.0" width="56" height="16"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="700" id="Q6m-up-Kp4"/>
+                                        </constraints>
                                         <textFieldCell key="cell" selectable="YES" alignment="center" title="warning" id="hYL-XN-ett">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
