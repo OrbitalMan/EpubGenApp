@@ -55,7 +55,7 @@ class EpubComposer {
         guard let inputContainerURL = Bundle.main.url(forResource: "container",
                                                       withExtension: "xml") else
         {
-            throw "inputContainerURL is missing"
+            throw "input \"container.xml\" bundle resourse is missing"
         }
         let outputContainerURL = metaInfFolderURL
             .appendingPathComponent("container")
@@ -130,8 +130,8 @@ class EpubComposer {
             .appendingPathComponent(inputEpubFolderURL.lastPathComponent)
             .appendingPathExtension("xhtml")
         let xhtmlInputString = try String(contentsOf: inputXHTMLFileURL)
-        let xhtmlOutputString = try spanGenerator.getOutput(input: xhtmlInputString, title: outputTitle)
-        try fileManager.createFile(from: xhtmlOutputString,
+        let xhtmlOutput = try spanGenerator.output(input: xhtmlInputString, title: outputTitle)
+        try fileManager.createFile(from: xhtmlOutput.string,
                                    directoryURL: textFolderURL,
                                    name: outputFileName,
                                    fileExtension: "xhtml")
@@ -139,11 +139,16 @@ class EpubComposer {
         let timingInputString = try String(contentsOf: inputTimingFileURL)
         let smilTextSource = "\(outputFileName).xhtml"
         let smilAudioSource = "../Audio/\(outputFileName).mp3"
-        let timingOutputString = smilGenerator.smil(from: timingInputString,
-                                                    textPath: smilTextSource,
-                                                    audioPath: smilAudioSource,
-                                                    offset: inputTimingOffset)
-        try fileManager.createFile(from: timingOutputString,
+        let timingOutput = smilGenerator.smil(from: timingInputString,
+                                              textPath: smilTextSource,
+                                              audioPath: smilAudioSource,
+                                              offset: inputTimingOffset)
+        
+        guard xhtmlOutput.spansCount == timingOutput.parsCount else {
+            throw "xhtml output spans count (\(xhtmlOutput.spansCount)) != timing output pars count (\(timingOutput.parsCount))"
+        }
+        
+        try fileManager.createFile(from: timingOutput.string,
                                    directoryURL: textFolderURL,
                                    name: outputFileName,
                                    fileExtension: "xhtml.smil")

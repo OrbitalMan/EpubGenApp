@@ -11,6 +11,11 @@ import SwiftSoup
 
 struct ColoredSpanGenerator {
     
+    struct Output {
+        let string: String
+        let spansCount: Int
+    }
+    
     let paragraphURL: URL = Bundle.main.url(forResource: "paragraph", withExtension: "xhtml")!
     let simpleURL: URL = Bundle.main.url(forResource: "simple", withExtension: "xhtml")!
     
@@ -19,18 +24,10 @@ struct ColoredSpanGenerator {
     }
     
     var output: String {
-        return output(input: inputContents)
+        return try! output(input: inputContents).string
     }
     
-    func output(input: String) -> String {
-        do {
-            return try getOutput(input: input)
-        } catch {
-            return "\(error)"
-        }
-    }
-    
-    func getOutput(input: String?, title: String = "") throws -> String {
+    func output(input: String?, title: String = "") throws -> Output {
         guard var input = input else {
             throw "input missing"
         }
@@ -46,9 +43,9 @@ struct ColoredSpanGenerator {
         try eraseColors(in: document)
         try wrapInSection(document: document)
         
-        var output = try hyphenate(document, with: .softHyphen)
-        output = removeUnwantedWhitespaces(in: output)
-        return output
+        var outputString = try hyphenate(document, with: .softHyphen)
+        outputString = removeUnwantedWhitespaces(in: outputString)
+        return Output(string: outputString, spansCount: coloredElements.count)
     }
     
     private func findStyleElement(in document: Document) throws -> DataNode {
