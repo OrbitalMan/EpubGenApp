@@ -39,6 +39,12 @@ struct ColoredSpanGenerator {
             let text = try? list.text()
             throw "ol/li list detected at \"\(text ?? "nil")\""
         }
+        if  let lists = try? document.select("ul"),
+            let list = lists.first()
+        {
+            let text = try? list.text()
+            throw "ul/li list detected at \"\(text ?? "nil")\""
+        }
         let coloredClasses = try findColoredClasses(in: document)
         let coloredElements = try findColoredElements(for: coloredClasses, in: document)
         

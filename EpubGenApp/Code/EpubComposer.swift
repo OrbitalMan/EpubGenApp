@@ -20,7 +20,8 @@ class EpubComposer {
                  inputTimingOffset: TimeInterval,
                  outputFileName: String?,
                  outputTitle: String?,
-                 outputEpubFolderURL: URL?) throws {
+                 outputEpubFolderURL: URL?,
+                 outputRawFolderURL: URL?) throws {
         guard let inputEpubFolderURL = inputEpubFolderURL else {
             throw "inputEpubFolderURL is missing"
         }
@@ -39,7 +40,11 @@ class EpubComposer {
         guard let outputEpubFolderURL = outputEpubFolderURL else {
             throw "outputEpubFolderURL is missing"
         }
+        guard let outputRawFolderURL = outputRawFolderURL else {
+            throw "outputRawFolderURL is missing"
+        }
         fileManager.removeIfExists(at: outputEpubFolderURL)
+        fileManager.removeIfExists(at: outputRawFolderURL)
         
         try fileManager.createDirectory(at: outputEpubFolderURL,
                                         withIntermediateDirectories: true,
@@ -150,6 +155,23 @@ class EpubComposer {
         
         try fileManager.createFile(from: timingOutput.string,
                                    directoryURL: textFolderURL,
+                                   name: outputFileName,
+                                   fileExtension: "xhtml.smil")
+        
+        try fileManager.createDirectory(at: outputRawFolderURL,
+                                        withIntermediateDirectories: true,
+                                        attributes: nil)
+        let outputRawAudioFileURL = outputRawFolderURL
+            .appendingPathComponent(outputFileName)
+            .appendingPathExtension("mp3")
+        try fileManager.copyItem(at: inputAudioFileURL,
+                                 to: outputRawAudioFileURL)
+        try fileManager.createFile(from: xhtmlOutput.string,
+                                   directoryURL: outputRawFolderURL,
+                                   name: outputFileName,
+                                   fileExtension: "xhtml")
+        try fileManager.createFile(from: timingOutput.string,
+                                   directoryURL: outputRawFolderURL,
                                    name: outputFileName,
                                    fileExtension: "xhtml.smil")
     }

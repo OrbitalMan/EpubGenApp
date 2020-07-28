@@ -95,6 +95,20 @@ class ViewController: NSViewController {
         return outputEpubFolderURL
     }
     
+    var outputRawFolderURL: URL? {
+        guard
+            let inputEpubFolderURL = inputEpubFolderURL,
+            let outputFileName = outputFileName else
+        {
+            return nil
+        }
+        let outputRawFolderURL = inputEpubFolderURL
+            .deletingLastPathComponent()
+            .appendingPathComponent("generated_raw")
+            .appendingPathComponent(outputFileName)
+        return outputRawFolderURL
+    }
+    
     let fileManager = FileManager.default
     lazy var epubComposer = EpubComposer()
     
@@ -195,7 +209,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func composeEpub(_ sender: Any) {
-        warningLabel.stringValue = ""
+        warningLabel.stringValue = "Composing..."
         do {
             try epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
                                      inputAudioFileURL: inputAudioFileURL,
@@ -203,7 +217,12 @@ class ViewController: NSViewController {
                                      inputTimingOffset: inputTimingOffsetField.doubleValue,
                                      outputFileName: outputFileName,
                                      outputTitle: outputTitle,
-                                     outputEpubFolderURL: outputEpubFolderURL)
+                                     outputEpubFolderURL: outputEpubFolderURL,
+                                     outputRawFolderURL: outputRawFolderURL)
+            warningLabel.stringValue = "Ready!"
+            DispatchQueue.main.asyncAfter(deadline: .now()+1) { [weak self] in
+                self?.warningLabel?.stringValue = ""
+            }
         } catch {
             view.window?.shake()
             print("composeEpub error:", error)
