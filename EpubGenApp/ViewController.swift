@@ -210,19 +210,27 @@ class ViewController: NSViewController {
     
     @IBAction func composeEpub(_ sender: Any) {
         warningLabel.stringValue = "Composing..."
+        let inputEpubFolderURL = self.inputEpubFolderURL
+        let inputAudioFileURL = self.inputAudioFileURL
+        let inputTimingFileURL = self.inputTimingFileURL
+        let inputTimingOffset = self.inputTimingOffsetField.doubleValue
+        let outputFileName = self.outputFileName
+        let outputTitle = self.outputTitle
+        let outputEpubFolderURL = self.outputEpubFolderURL
+        let outputRawFolderURL = self.outputRawFolderURL
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else {
                 return
             }
             do {
-                try self.epubComposer.compose(inputEpubFolderURL: self.inputEpubFolderURL,
-                                         inputAudioFileURL: self.inputAudioFileURL,
-                                         inputTimingFileURL: self.inputTimingFileURL,
-                                         inputTimingOffset: self.inputTimingOffsetField.doubleValue,
-                                         outputFileName: self.outputFileName,
-                                         outputTitle: self.outputTitle,
-                                         outputEpubFolderURL: self.outputEpubFolderURL,
-                                         outputRawFolderURL: self.outputRawFolderURL)
+                try self.epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
+                                              inputAudioFileURL: inputAudioFileURL,
+                                              inputTimingFileURL: inputTimingFileURL,
+                                              inputTimingOffset: inputTimingOffset,
+                                              outputFileName: outputFileName,
+                                              outputTitle: outputTitle,
+                                              outputEpubFolderURL: outputEpubFolderURL,
+                                              outputRawFolderURL: outputRawFolderURL)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else {
                         return
