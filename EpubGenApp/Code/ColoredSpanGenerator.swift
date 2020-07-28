@@ -41,6 +41,7 @@ struct ColoredSpanGenerator {
         }
         try identify(elements: coloredElements)
         try eraseColors(in: document)
+        try refineLinks(in: document)
         try wrapInSection(document: document)
         
         var outputString = try hyphenate(document, with: .softHyphen)
@@ -228,6 +229,19 @@ struct ColoredSpanGenerator {
                                                    options: .regularExpression)
         }
         style.setWholeData(newData)
+    }
+    
+    private func refineLinks(in document: Document) throws {
+        let links = try document.select("a")
+        for link in links {
+            if  let href = try? link.attr("href"),
+                href.starts(with: "http"),
+                let url = href.components(separatedBy: "q=").last?.components(separatedBy: "&").first
+            {
+                let refinedURL = url.replacingOccurrences(of: "%25", with: "%")
+                try link.attr("href", refinedURL)
+            }
+        }
     }
     
     private func hyphenate(_ document: Document,
