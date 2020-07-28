@@ -65,4 +65,19 @@ extension FileManager {
         return Double(CMTimeGetSeconds(asset.duration))
     }
     
+    func files(inDirectory url: URL?) -> [URL] {
+        guard let url = url else { return [] }
+        do {
+            let files = try contentsOfDirectory(at: url,
+                                                includingPropertiesForKeys: nil,
+                                                options: [.skipsHiddenFiles,
+                                                          .skipsSubdirectoryDescendants,
+                                                          .skipsPackageDescendants])
+            return files.filter { fileNotDirectoryExists(atPath: $0.path) }
+        } catch {
+            print("files in directory error:", error)
+            return []
+        }
+    }
+    
 }

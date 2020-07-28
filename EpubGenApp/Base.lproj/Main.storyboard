@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -687,9 +687,9 @@
                     <window key="window" title="EpubGen" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="800" height="140"/>
+                        <rect key="contentRect" x="196" y="240" width="1800" height="140"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <value key="minSize" type="size" width="620" height="140"/>
+                        <value key="minSize" type="size" width="920" height="140"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
                         </connections>
@@ -707,14 +707,14 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="EpubGenApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="1058" height="140"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1169" height="178"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="20" horizontalStackHuggingPriority="1000" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IfT-PM-YvI">
-                                <rect key="frame" x="10" y="10" width="1038" height="120"/>
+                            <stackView distribution="fillProportionally" orientation="horizontal" alignment="centerY" spacing="20" horizontalStackHuggingPriority="1000" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IfT-PM-YvI">
+                                <rect key="frame" x="10" y="10" width="1149" height="158"/>
                                 <subviews>
                                     <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="1000" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6J9-c1-VOh">
-                                        <rect key="frame" x="0.0" y="19" width="655" height="83"/>
+                                        <rect key="frame" x="0.0" y="38" width="655" height="83"/>
                                         <subviews>
                                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="1000" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hSg-C0-Nsp">
                                                 <rect key="frame" x="0.0" y="62" width="655" height="21"/>
@@ -753,7 +753,7 @@
                                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r50-h6-bYC">
                                                 <rect key="frame" x="0.0" y="31" width="655" height="21"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uu0-Ql-wzw">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Uu0-Ql-wzw">
                                                         <rect key="frame" x="0.0" y="0.0" width="572" height="21"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Audio mp3 file" drawsBackground="YES" id="EBR-XF-XhW">
                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -844,18 +844,18 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3N-Fr-Tex">
-                                        <rect key="frame" x="675" y="19" width="363" height="83"/>
+                                        <rect key="frame" x="675" y="25" width="474" height="109"/>
                                         <subviews>
                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J8Z-zJ-SyH">
-                                                <rect key="frame" x="134" y="62" width="96" height="21"/>
+                                                <rect key="frame" x="44" y="88" width="387" height="21"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="File name" drawsBackground="YES" id="gsk-yS-Myq">
                                                     <font key="font" usesAppearanceFont="YES"/>
                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ooP-O6-umX">
-                                                <rect key="frame" x="1" y="31" width="362" height="21"/>
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="ooP-O6-umX">
+                                                <rect key="frame" x="56" y="57" width="362" height="21"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Title" drawsBackground="YES" id="7wN-0g-7y1">
                                                     <font key="font" usesAppearanceFont="YES"/>
                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -863,10 +863,17 @@
                                                 </textFieldCell>
                                             </textField>
                                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZF-fT-gph">
-                                                <rect key="frame" x="75" y="0.0" width="214" height="21"/>
+                                                <rect key="frame" x="0.0" y="26" width="474" height="21"/>
                                                 <subviews>
-                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ctR-em-3QL">
-                                                        <rect key="frame" x="-6" y="-7" width="98" height="32"/>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="rL3-d4-1Ih">
+                                                        <rect key="frame" x="0.0" y="6" width="120" height="8"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="8" id="f3V-a1-vNi"/>
+                                                            <constraint firstAttribute="width" constant="120" id="naS-6r-j1C"/>
+                                                        </constraints>
+                                                    </customView>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="ctR-em-3QL">
+                                                        <rect key="frame" x="124" y="-7" width="98" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Compose" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="esx-Y4-dHG">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -875,8 +882,8 @@
                                                             <action selector="composeEpub:" target="XfG-lQ-9wD" id="W9l-Wd-PgX"/>
                                                         </connections>
                                                     </button>
-                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YyC-oL-CUC">
-                                                        <rect key="frame" x="90" y="-7" width="130" height="32"/>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="YyC-oL-CUC">
+                                                        <rect key="frame" x="220" y="-7" width="130" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Show in Finder" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="O6Z-Qp-iK0">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -885,23 +892,44 @@
                                                             <action selector="showGeneratedInFinder:" target="XfG-lQ-9wD" id="pKA-fg-kL7"/>
                                                         </connections>
                                                     </button>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="V1W-8T-fT6">
+                                                        <rect key="frame" x="354" y="6" width="120" height="8"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="120" id="DWZ-lf-nji"/>
+                                                            <constraint firstAttribute="height" constant="8" id="aJF-OV-Rp1"/>
+                                                        </constraints>
+                                                    </customView>
                                                 </subviews>
                                                 <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aGh-5H-Y11">
+                                                <rect key="frame" x="208" y="0.0" width="58" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" alignment="center" title="Warning" id="hYL-XN-ett">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
                                         </subviews>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
+                                            <integer value="1000"/>
                                         </visibilityPriorities>
                                         <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
@@ -933,11 +961,12 @@
                         <outlet property="inputTimingOffsetField" destination="A3r-lZ-7sR" id="3VH-ys-KDc"/>
                         <outlet property="outputFileNameField" destination="J8Z-zJ-SyH" id="4Gd-ud-qsZ"/>
                         <outlet property="outputTitleField" destination="ooP-O6-umX" id="mRq-1t-nb0"/>
+                        <outlet property="warningLabel" destination="aGh-5H-Y11" id="1hz-MB-Fld"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="559"/>
+            <point key="canvasLocation" x="76" y="571"/>
         </scene>
     </scenes>
 </document>

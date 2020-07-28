@@ -17,6 +17,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var outputFileNameField: NSTextField!
     @IBOutlet weak var outputTitleField: NSTextField!
     @IBOutlet weak var composeButton: NSButton!
+    @IBOutlet weak var warningLabel: NSTextField!
     
     var inputEpubFolderURL: URL? {
         didSet {
@@ -25,7 +26,27 @@ class ViewController: NSViewController {
             if let parsedTitle = try? ColoredSpanGenerator.parseTitle(from: inputEpubFolderURL) {
                 outputTitle = parsedTitle
             }
+            inputAudioFileURL = estimatedInputAudioFileURL ?? inputMetadataURL
+            inputTimingFileURL = estimatedInputTimingFileURL ?? inputMetadataURL
         }
+    }
+    
+    var inputMetadataURL: URL? {
+        guard let inputEpubFolderURL = inputEpubFolderURL else { return nil }
+        let root = inputEpubFolderURL.deletingLastPathComponent()
+        let metadata = root.appendingPathComponent("metadata")
+        guard fileManager.directoryExists(atPath: metadata.path) else { return root }
+        let paragraphMetadata = metadata.appendingPathComponent(inputEpubFolderURL.lastPathComponent)
+        guard fileManager.directoryExists(atPath: paragraphMetadata.path) else { return metadata }
+        return paragraphMetadata
+    }
+    
+    var estimatedInputAudioFileURL: URL? {
+        return fileManager.files(inDirectory: inputMetadataURL).first { $0.pathExtension == "mp3" }
+    }
+    
+    var estimatedInputTimingFileURL: URL? {
+        return fileManager.files(inDirectory: inputMetadataURL).first { $0.pathExtension == "txt" }
     }
     
     var inputAudioFileURL: URL? {
@@ -79,9 +100,7 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // let gen = ColoredSpanGenerator()
-        // let out = gen.output(input: gen.inputContents)
-        // print(out)
+        warningLabel.stringValue = ""
     }
     
     @IBAction func enteredInputEpubFolder(_ sender: Any) {
@@ -133,6 +152,7 @@ class ViewController: NSViewController {
         inputAudioFilePicker.canChooseDirectories    = false
         inputAudioFilePicker.canChooseFiles          = true
         inputAudioFilePicker.allowedFileTypes        = ["mp3"]
+        inputAudioFilePicker.directoryURL            = estimatedInputAudioFileURL ?? inputMetadataURL
         
         let pickerResponse = inputAudioFilePicker.runModal()
         if pickerResponse == .OK {
@@ -162,6 +182,7 @@ class ViewController: NSViewController {
         inputTimingFilePicker.canChooseDirectories    = false
         inputTimingFilePicker.canChooseFiles          = true
         inputTimingFilePicker.allowedFileTypes        = ["txt"]
+        inputTimingFilePicker.directoryURL            = estimatedInputTimingFileURL ?? inputMetadataURL
         
         let pickerResponse = inputTimingFilePicker.runModal()
         if pickerResponse == .OK {
@@ -174,6 +195,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func composeEpub(_ sender: Any) {
+        warningLabel.stringValue = ""
         do {
             try epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
                                      inputAudioFileURL: inputAudioFileURL,
@@ -186,6 +208,7 @@ class ViewController: NSViewController {
             view.window?.shake()
             print("composeEpub error:", error)
             print(" ")
+            warningLabel.stringValue = error.logDescription
         }
     }
     
