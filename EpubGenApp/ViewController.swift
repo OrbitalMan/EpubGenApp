@@ -210,24 +210,42 @@ class ViewController: NSViewController {
     
     @IBAction func composeEpub(_ sender: Any) {
         warningLabel.stringValue = "Composing..."
-        do {
-            try epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
-                                     inputAudioFileURL: inputAudioFileURL,
-                                     inputTimingFileURL: inputTimingFileURL,
-                                     inputTimingOffset: inputTimingOffsetField.doubleValue,
-                                     outputFileName: outputFileName,
-                                     outputTitle: outputTitle,
-                                     outputEpubFolderURL: outputEpubFolderURL,
-                                     outputRawFolderURL: outputRawFolderURL)
-            warningLabel.stringValue = "Ready!"
-            DispatchQueue.main.asyncAfter(deadline: .now()+1) { [weak self] in
-                self?.warningLabel?.stringValue = ""
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else {
+                return
             }
-        } catch {
-            view.window?.shake()
-            print("composeEpub error:", error)
-            print(" ")
-            warningLabel.stringValue = error.logDescription
+            do {
+                try self.epubComposer.compose(inputEpubFolderURL: self.inputEpubFolderURL,
+                                         inputAudioFileURL: self.inputAudioFileURL,
+                                         inputTimingFileURL: self.inputTimingFileURL,
+                                         inputTimingOffset: self.inputTimingOffsetField.doubleValue,
+                                         outputFileName: self.outputFileName,
+                                         outputTitle: self.outputTitle,
+                                         outputEpubFolderURL: self.outputEpubFolderURL,
+                                         outputRawFolderURL: self.outputRawFolderURL)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+                    self.warningLabel.stringValue = "Ready!"
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1) { [weak self] in
+                        guard let self = self else {
+                            return
+                        }
+                        self.warningLabel?.stringValue = ""
+                    }
+                }
+            } catch {
+                print("composeEpub error:", error)
+                print(" ")
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+                    self.view.window?.shake()
+                    self.warningLabel.stringValue = error.logDescription
+                }
+            }
         }
     }
     
