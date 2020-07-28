@@ -33,6 +33,12 @@ struct ColoredSpanGenerator {
         }
         input = removeUnwantedWhitespaces(in: input)
         let document = try SwiftSoup.parse(input)
+        if  let lists = try? document.select("ol"),
+            let list = lists.first()
+        {
+            let text = try? list.text()
+            throw "ol/li list detected at \"\(text ?? "nil")\""
+        }
         let coloredClasses = try findColoredClasses(in: document)
         let coloredElements = try findColoredElements(for: coloredClasses, in: document)
         
