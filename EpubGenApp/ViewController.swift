@@ -42,7 +42,7 @@ class ViewController: NSViewController {
     }
     
     var estimatedInputAudioFileURL: URL? {
-        return fileManager.files(inDirectory: inputMetadataURL).first { $0.pathExtension == "mp3" }
+        return fileManager.files(inDirectory: inputMetadataURL).first { $0.lastPathComponent.contains("_b44.mp3") }
     }
     
     var estimatedInputTimingFileURL: URL? {
