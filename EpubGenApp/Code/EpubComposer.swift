@@ -60,7 +60,7 @@ class EpubComposer {
         guard let inputContainerURL = Bundle.main.url(forResource: "container",
                                                       withExtension: "xml") else
         {
-            throw "input \"container.xml\" bundle resourse is missing"
+            throw "input \"container.xml\" bundle resource is missing"
         }
         let outputContainerURL = metaInfFolderURL
             .appendingPathComponent("container")
@@ -72,6 +72,25 @@ class EpubComposer {
         try fileManager.createDirectory(at: oebpsFolderURL,
                                         withIntermediateDirectories: true,
                                         attributes: nil)
+        
+        let inputGoogleDocFolderURL = inputEpubFolderURL.appendingPathComponent("GoogleDoc")
+        let inputImagesFolderURL = inputGoogleDocFolderURL.appendingPathComponent("images")
+        let imageURLs = fileManager.files(inDirectory: inputImagesFolderURL)
+        if imageURLs.contains(where: { !(["png", "jpg", "jpeg"].contains($0.pathExtension.lowercased())) }) {
+            throw "unexpected image URL found in \(imageURLs)"
+        }
+        
+        if !imageURLs.isEmpty {
+            let outputImagesFolderURL = oebpsFolderURL.appendingPathComponent("Images")
+            try fileManager.createDirectory(at: outputImagesFolderURL,
+                                            withIntermediateDirectories: true,
+                                            attributes: nil)
+            for inputImageURL in imageURLs {
+                let outputImageURL = outputImagesFolderURL.appendingPathComponent(inputImageURL.lastPathComponent)
+                try fileManager.copyItem(at: inputImageURL,
+                                         to: outputImageURL)
+            }
+        }
         
         guard let inputPackageTemplateURL = Bundle.main.url(forResource: "package",
                                                             withExtension: "opf") else
@@ -85,7 +104,6 @@ class EpubComposer {
         let mediaDurationString = DateFormatter.packageFormatter.string(from: Date(timeInterval: mediaDuration,
                                                                                    since: DateFormatter.smilReferenceDate))
         outputPackageString = outputPackageString.replacingOccurrences(of: "$#mediaDuration#$", with: mediaDurationString)
-        let inputGoogleDocFolderURL = inputEpubFolderURL.appendingPathComponent("GoogleDoc")
         let inputPackageURL = inputGoogleDocFolderURL
             .appendingPathComponent("package")
             .appendingPathExtension("opf")
@@ -98,6 +116,14 @@ class EpubComposer {
         }
         outputPackageString = outputPackageString.replacingOccurrences(of: "$#modifiedDate#$", with: modifiedDate)
         outputPackageString = outputPackageString.replacingOccurrences(of: "$#uid#$", with: uid)
+        
+        var imageItemsString = ""
+        for imageURL in imageURLs {
+            let imageItem = "\n        <item id=\"\(imageURL.deletingPathExtension().lastPathComponent)\" href=\"Images/\(imageURL.lastPathComponent)\" media-type=\"image/png\"/>"
+            imageItemsString.append(imageItem)
+        }
+        outputPackageString = outputPackageString.replacingOccurrences(of: "$#imageItems#$", with: imageItemsString)
+        
         try fileManager.createFile(from: outputPackageString,
                                    directoryURL: oebpsFolderURL,
                                    name: "package",
@@ -135,7 +161,7 @@ class EpubComposer {
             .appendingPathComponent(inputEpubFolderURL.lastPathComponent)
             .appendingPathExtension("xhtml")
         let xhtmlInputString = try String(contentsOf: inputXHTMLFileURL)
-        let xhtmlOutput = try spanGenerator.output(input: xhtmlInputString, title: outputTitle)
+        let xhtmlOutput = try spanGenerator.output(input: xhtmlInputString, title: outputTitle, rawMode: false)
         try fileManager.createFile(from: xhtmlOutput.string,
                                    directoryURL: textFolderURL,
                                    name: outputFileName,
@@ -158,18 +184,31 @@ class EpubComposer {
                                    name: outputFileName,
                                    fileExtension: "xhtml.smil")
         
+        // MARK: - raw iOS generation
+        
         try fileManager.createDirectory(at: outputRawFolderURL,
                                         withIntermediateDirectories: true,
                                         attributes: nil)
+        if !imageURLs.isEmpty {
+            for inputImageURL in imageURLs {
+                let outputImageURL = outputRawFolderURL.appendingPathComponent(inputImageURL.lastPathComponent)
+                try fileManager.copyItem(at: inputImageURL,
+                                         to: outputImageURL)
+            }
+        }
+        
         let outputRawAudioFileURL = outputRawFolderURL
             .appendingPathComponent(outputFileName)
             .appendingPathExtension("mp3")
         try fileManager.copyItem(at: inputAudioFileURL,
                                  to: outputRawAudioFileURL)
-        try fileManager.createFile(from: xhtmlOutput.string,
+        
+        let xhtmlRawOutput = try spanGenerator.output(input: xhtmlInputString, title: outputTitle, rawMode: true)
+        try fileManager.createFile(from: xhtmlRawOutput.string,
                                    directoryURL: outputRawFolderURL,
                                    name: outputFileName,
                                    fileExtension: "xhtml")
+        
         try fileManager.createFile(from: timingOutput.string,
                                    directoryURL: outputRawFolderURL,
                                    name: outputFileName,

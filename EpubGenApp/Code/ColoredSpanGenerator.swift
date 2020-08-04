@@ -24,10 +24,10 @@ struct ColoredSpanGenerator {
     }
     
     var output: String {
-        return try! output(input: inputContents).string
+        return try! output(input: inputContents, rawMode: false).string
     }
     
-    func output(input: String?, title: String = "") throws -> Output {
+    func output(input: String?, title: String = "", rawMode: Bool) throws -> Output {
         guard var input = input else {
             throw "input missing"
         }
@@ -51,9 +51,10 @@ struct ColoredSpanGenerator {
         if !title.isEmpty {
             try document.title(title)
         }
-        try identify(elements: coloredElements)
+        try identify(elements: coloredElements, rawMode: rawMode)
         try eraseColors(in: document)
-        try refineLinks(in: document)
+        try refineLinks(in: document, rawMode: rawMode)
+        try fixImages(in: document, rawMode: rawMode)
         try wrapInSection(document: document)
         
         var outputString = try hyphenate(document, with: .softHyphen)
@@ -218,11 +219,16 @@ struct ColoredSpanGenerator {
         return try findCommonParent(of: Array(parents))
     }
     
-    private func identify(elements: [Element]) throws {
+    private func identify(elements: [Element], rawMode: Bool) throws {
         for index in elements.indices {
             let element = elements[index]
             let fragmentId = String(format: "f%06d", index+1)
             try element.attr("id", fragmentId)
+        }
+        if rawMode {
+            for element in elements {
+                // TODO: add textLocation and textLength
+            }
         }
     }
     
@@ -243,7 +249,7 @@ struct ColoredSpanGenerator {
         style.setWholeData(newData)
     }
     
-    private func refineLinks(in document: Document) throws {
+    private func refineLinks(in document: Document, rawMode: Bool) throws {
         let links = try document.select("a")
         for link in links {
             if  let href = try? link.attr("href"),
@@ -252,6 +258,32 @@ struct ColoredSpanGenerator {
             {
                 let refinedURL = url.replacingOccurrences(of: "%25", with: "%")
                 try link.attr("href", refinedURL)
+            }
+        }
+        if rawMode {
+            for link in links {
+                // TODO: add textLocation and textLength
+            }
+        }
+    }
+    
+    private func fixImages(in document: Document, rawMode: Bool) throws {
+        let imgs = try document.select("img")
+        for img in imgs {
+            if let src = try? img.attr("src") {
+                let fixedPath: String
+                if rawMode {
+                    fixedPath = ""
+                } else {
+                    fixedPath = "../Images/"
+                }
+                let fixedSrc = src.replacingOccurrences(of: "images/", with: fixedPath)
+                try img.attr("src", fixedSrc)
+            }
+        }
+        if rawMode {
+            for img in imgs {
+                // TODO: add textLocation
             }
         }
     }
@@ -356,6 +388,7 @@ extension Document {
                              "<?xml version=\"$1\" encoding=\"UTF-8\"?>\n"),
                             ("<meta charset=\"([a-zA-Z0-9-]+)\">", "<meta charset=\"UTF-8\"/>"),
                             ("<hr class=\"([a-zA-Z0-9-]+)\">", "<hr class=\"$1\"/>"),
+                            ("<img (.+?)\">", "<img $1\"/>"),
                             ("&amp;", "&"),
                             ("&shy;", String.softHyphen),
                             ("&quot;", "\""),
