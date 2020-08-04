@@ -75,7 +75,12 @@ class EpubComposer {
         
         let inputGoogleDocFolderURL = inputEpubFolderURL.appendingPathComponent("GoogleDoc")
         let inputImagesFolderURL = inputGoogleDocFolderURL.appendingPathComponent("images")
-        let imageURLs = fileManager.files(inDirectory: inputImagesFolderURL)
+        let imageURLs: [URL]
+        if fileManager.directoryExists(atPath: inputImagesFolderURL.path) {
+            imageURLs = fileManager.files(inDirectory: inputImagesFolderURL)
+        } else {
+            imageURLs = []
+        }
         if imageURLs.contains(where: { !(["png", "jpg", "jpeg"].contains($0.pathExtension.lowercased())) }) {
             throw "unexpected image URL found in \(imageURLs)"
         }
