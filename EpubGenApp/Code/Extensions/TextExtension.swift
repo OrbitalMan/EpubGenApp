@@ -112,6 +112,14 @@ extension String {
         return string as String
     }
     
+    func attributedFromHTML() throws -> NSMutableAttributedString {
+        let data = Data(utf8)
+        let output = try NSMutableAttributedString(data: data,
+                                                   options: [.documentType: NSAttributedString.DocumentType.html],
+                                                   documentAttributes: nil)
+        return output
+    }
+    
 }
 
 extension Locale {

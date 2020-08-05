@@ -8,11 +8,16 @@
 
 import Foundation
 
+protocol EpubComposerDelegate: AnyObject {
+    func event(message: String)
+}
+
 class EpubComposer {
     
     let fileManager = FileManager.default
     lazy var spanGenerator = ColoredSpanGenerator()
     lazy var smilGenerator = SmilGenerator()
+    weak var delegate: EpubComposerDelegate?
     
     func compose(inputEpubFolderURL: URL?,
                  inputAudioFileURL: URL?,
@@ -102,6 +107,9 @@ class EpubComposer {
         {
             throw "inputPackageTemplateURL is missing"
         }
+        
+        delegate?.event(message: "Composing package.opf")
+        
         let inputPackageTemplateString = try String(contentsOf: inputPackageTemplateURL)
         var outputPackageString = inputPackageTemplateString.replacingOccurrences(of: "$#outputFileName#$", with: outputFileName)
         outputPackageString = outputPackageString.replacingOccurrences(of: "$#outputTitle#$", with: outputTitle)
@@ -134,6 +142,8 @@ class EpubComposer {
                                    name: "package",
                                    fileExtension: "opf")
         
+        delegate?.event(message: "Copying audio")
+        
         let audioFolderURL = oebpsFolderURL.appendingPathComponent("Audio")
         try fileManager.createDirectory(at: audioFolderURL,
                                         withIntermediateDirectories: true,
@@ -162,15 +172,21 @@ class EpubComposer {
                                    name: "nav",
                                    fileExtension: "xhtml")
         
+        delegate?.event(message: "Composing xhtml")
+        
         let inputXHTMLFileURL = inputGoogleDocFolderURL
             .appendingPathComponent(inputEpubFolderURL.lastPathComponent)
             .appendingPathExtension("xhtml")
         let xhtmlInputString = try String(contentsOf: inputXHTMLFileURL)
-        let xhtmlOutput = try spanGenerator.output(input: xhtmlInputString, title: outputTitle, rawMode: false)
+        let xhtmlOutput = try spanGenerator.output(input: xhtmlInputString,
+                                                   title: outputTitle,
+                                                   timingData: nil)
         try fileManager.createFile(from: xhtmlOutput.string,
                                    directoryURL: textFolderURL,
                                    name: outputFileName,
                                    fileExtension: "xhtml")
+        
+        delegate?.event(message: "Composing smil")
         
         let timingInputString = try String(contentsOf: inputTimingFileURL)
         let smilTextSource = "\(outputFileName).xhtml"
@@ -190,6 +206,7 @@ class EpubComposer {
                                    fileExtension: "xhtml.smil")
         
         // MARK: - raw iOS generation
+        delegate?.event(message: "Composing raw folder")
         
         try fileManager.createDirectory(at: outputRawFolderURL,
                                         withIntermediateDirectories: true,
@@ -208,16 +225,17 @@ class EpubComposer {
         try fileManager.copyItem(at: inputAudioFileURL,
                                  to: outputRawAudioFileURL)
         
-        let xhtmlRawOutput = try spanGenerator.output(input: xhtmlInputString, title: outputTitle, rawMode: true)
+        delegate?.event(message: "Composing raw xhtml")
+        
+        let timingData = ColoredSpanGenerator.TimingData(inputString: timingInputString,
+                                                         offset: inputTimingOffset)
+        let xhtmlRawOutput = try spanGenerator.output(input: xhtmlInputString,
+                                                      title: outputTitle,
+                                                      timingData: timingData)
         try fileManager.createFile(from: xhtmlRawOutput.string,
                                    directoryURL: outputRawFolderURL,
                                    name: outputFileName,
                                    fileExtension: "xhtml")
-        
-        try fileManager.createFile(from: timingOutput.string,
-                                   directoryURL: outputRawFolderURL,
-                                   name: outputFileName,
-                                   fileExtension: "xhtml.smil")
     }
     
 }

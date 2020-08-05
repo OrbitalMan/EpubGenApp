@@ -115,6 +115,7 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         warningLabel.stringValue = ""
+        epubComposer.delegate = self
     }
     
     @IBAction func enteredInputEpubFolder(_ sender: Any) {
@@ -209,7 +210,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func composeEpub(_ sender: Any) {
-        warningLabel.stringValue = "Composing..."
+        warningLabel.stringValue = "Started composing..."
         let inputEpubFolderURL = self.inputEpubFolderURL
         let inputAudioFileURL = self.inputAudioFileURL
         let inputTimingFileURL = self.inputTimingFileURL
@@ -219,11 +220,8 @@ class ViewController: NSViewController {
         let outputEpubFolderURL = self.outputEpubFolderURL
         let outputRawFolderURL = self.outputRawFolderURL
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else {
-                return
-            }
             do {
-                try self.epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
+                try self?.epubComposer.compose(inputEpubFolderURL: inputEpubFolderURL,
                                               inputAudioFileURL: inputAudioFileURL,
                                               inputTimingFileURL: inputTimingFileURL,
                                               inputTimingOffset: inputTimingOffset,
@@ -232,26 +230,17 @@ class ViewController: NSViewController {
                                               outputEpubFolderURL: outputEpubFolderURL,
                                               outputRawFolderURL: outputRawFolderURL)
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else {
-                        return
-                    }
-                    self.warningLabel.stringValue = "Ready!"
+                    self?.warningLabel.stringValue = "Ready!"
                     DispatchQueue.main.asyncAfter(deadline: .now()+1) { [weak self] in
-                        guard let self = self else {
-                            return
-                        }
-                        self.warningLabel?.stringValue = ""
+                        self?.warningLabel?.stringValue = ""
                     }
                 }
             } catch {
                 print("composeEpub error:", error)
                 print(" ")
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else {
-                        return
-                    }
-                    self.view.window?.shake()
-                    self.warningLabel.stringValue = error.logDescription
+                    self?.view.window?.shake()
+                    self?.warningLabel.stringValue = error.logDescription
                 }
             }
         }
@@ -292,6 +281,16 @@ extension NSWindow {
         
         animations = [NSAnimatablePropertyKey("frameOrigin") : shakeAnimation]
         animator().setFrameOrigin(NSPoint(x: frame.minX, y: frame.minY))
+    }
+    
+}
+
+extension ViewController: EpubComposerDelegate {
+    
+    func event(message: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.warningLabel.stringValue = message
+        }
     }
     
 }

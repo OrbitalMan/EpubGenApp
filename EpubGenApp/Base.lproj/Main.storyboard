@@ -939,11 +939,11 @@
                                         </customSpacing>
                                     </stackView>
                                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="aGh-5H-Y11">
-                                        <rect key="frame" x="1085" y="0.0" width="56" height="16"/>
+                                        <rect key="frame" x="1087" y="0.0" width="52" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="700" id="Q6m-up-Kp4"/>
                                         </constraints>
-                                        <textFieldCell key="cell" selectable="YES" alignment="center" title="warning" id="hYL-XN-ett">
+                                        <textFieldCell key="cell" selectable="YES" alignment="justified" title="warning" id="hYL-XN-ett">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

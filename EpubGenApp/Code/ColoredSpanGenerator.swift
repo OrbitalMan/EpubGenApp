@@ -16,23 +16,17 @@ struct ColoredSpanGenerator {
         let spansCount: Int
     }
     
-    let paragraphURL: URL = Bundle.main.url(forResource: "paragraph", withExtension: "xhtml")!
-    let simpleURL: URL = Bundle.main.url(forResource: "simple", withExtension: "xhtml")!
-    
-    var inputContents: String {
-        return try! String(contentsOf: paragraphURL)
+    struct TimingData {
+        let inputString: String
+        let offset: TimeInterval
     }
     
-    var output: String {
-        return try! output(input: inputContents, rawMode: false).string
-    }
-    
-    func output(input: String?, title: String = "", rawMode: Bool) throws -> Output {
+    func output(input: String?, title: String = "", timingData: TimingData?) throws -> Output {
         guard var input = input else {
             throw "input missing"
         }
         input = removeUnwantedWhitespaces(in: input)
-        let document = try SwiftSoup.parse(input)
+        var document = try SwiftSoup.parse(input)
         if  let lists = try? document.select("ol"),
             let list = lists.first()
         {
@@ -46,19 +40,42 @@ struct ColoredSpanGenerator {
             throw "ul/li list detected at \"\(text ?? "nil")\""
         }
         let coloredClasses = try findColoredClasses(in: document)
-        let coloredElements = try findColoredElements(for: coloredClasses, in: document)
         
         if !title.isEmpty {
             try document.title(title)
         }
-        try identify(elements: coloredElements, rawMode: rawMode)
+        document = try hyphenate(document, with: .softHyphen)
+        let coloredElements = try findColoredElements(for: coloredClasses, in: document)
+        try identify(elements: coloredElements)
         try eraseColors(in: document)
-        try refineLinks(in: document, rawMode: rawMode)
-        try fixImages(in: document, rawMode: rawMode)
+        try refineLinks(in: document)
+        try fixImages(in: document, rawMode: timingData != nil)
         try wrapInSection(document: document)
         
-        var outputString = try hyphenate(document, with: .softHyphen)
+        var outputString = try document.xhtml()
         outputString = removeUnwantedWhitespaces(in: outputString)
+        if let timing = timingData {
+            document = try SwiftSoup.parse(outputString)
+            let spans = try document.select("span")
+            let cueSpans = spans.filter { $0.id().lowercased().starts(with: "f") }
+            
+            let smilGenerator = SmilGenerator()
+            let clips = smilGenerator.parseClips(from: timing.inputString,
+                                                 offset: timing.offset)
+            guard cueSpans.count == clips.count else {
+                throw "cueSpans (\(cueSpans.count)) != clips (\(clips.count))"
+            }
+            for (span, clip) in zip(cueSpans, clips) {
+                let begin = rawTimeStampString(from: clip.begin)
+                let end = rawTimeStampString(from: clip.end)
+                try span.attr("clipBegin", begin)
+                try span.attr("clipEnd", end)
+            }
+            
+            try generateRanges(in: document, output: outputString, cueSpans: cueSpans)
+            outputString = try document.xhtml()
+            outputString = removeUnwantedWhitespaces(in: outputString)
+        }
         return Output(string: outputString, spansCount: coloredElements.count)
     }
     
@@ -219,16 +236,11 @@ struct ColoredSpanGenerator {
         return try findCommonParent(of: Array(parents))
     }
     
-    private func identify(elements: [Element], rawMode: Bool) throws {
+    private func identify(elements: [Element]) throws {
         for index in elements.indices {
             let element = elements[index]
             let fragmentId = String(format: "f%06d", index+1)
             try element.attr("id", fragmentId)
-        }
-        if rawMode {
-            for element in elements {
-                // TODO: add textLocation and textLength
-            }
         }
     }
     
@@ -249,7 +261,7 @@ struct ColoredSpanGenerator {
         style.setWholeData(newData)
     }
     
-    private func refineLinks(in document: Document, rawMode: Bool) throws {
+    private func refineLinks(in document: Document) throws {
         let links = try document.select("a")
         for link in links {
             if  let href = try? link.attr("href"),
@@ -258,11 +270,6 @@ struct ColoredSpanGenerator {
             {
                 let refinedURL = url.replacingOccurrences(of: "%25", with: "%")
                 try link.attr("href", refinedURL)
-            }
-        }
-        if rawMode {
-            for link in links {
-                // TODO: add textLocation and textLength
             }
         }
     }
@@ -283,14 +290,14 @@ struct ColoredSpanGenerator {
         }
         if rawMode {
             for img in imgs {
-                // TODO: add textLocation
+                try img.generateTextLocation()
             }
         }
     }
     
     private func hyphenate(_ document: Document,
                            with hyphen: String = .softHyphen,
-                           locale: Locale = Locale(identifier: "uk-ua")) throws -> String {
+                           locale: Locale = Locale(identifier: "uk-ua")) throws -> Document {
         let textElements = try document.selectTextElements()
         var output = try document.xhtml()
         var searchRange = output.range
@@ -323,7 +330,7 @@ struct ColoredSpanGenerator {
                                                  with: hyphenatedText,
                                                  range: range)
         }
-        return output
+        return try SwiftSoup.parse(output)
     }
     
     private func removeUnwantedWhitespaces(in input: String) -> String {
@@ -371,6 +378,52 @@ struct ColoredSpanGenerator {
             title = String(title.dropLast())
         }
         return title
+    }
+    
+    func generateRanges(in document: Document,
+                        output: String,
+                        cueSpans: [Element]) throws {
+        let text = try output.attributedFromHTML().mutableString
+        var searchRange = NSRange(location: 0, length: text.length)
+        
+        for span in cueSpans {
+            let spanText = try span.attributedString().string.trimmingCharacters(in: .whitespacesAndNewlines)
+            let range = text.range(of: spanText,
+                                   options: [.caseInsensitive, .diacriticInsensitive],
+                                   range: searchRange)
+            if range.location == NSNotFound {
+                throw "\ngenerateRanges: span\n'\(spanText)'\ntext not found in\n'\(text.substring(with: searchRange))'\n"
+            }
+            let location = NSMaxRange(range)
+            searchRange = NSRange(location: location,
+                                  length: text.length-location)
+            try span.attr("textLocation", range.location.description)
+            try span.attr("textLength", range.length.description)
+        }
+        
+        searchRange = NSRange(location: 0, length: text.length)
+        for link in try document.select("a") {
+            let linkText = try link.attributedString().string
+            let range = text.range(of: linkText,
+                                   options: [],
+                                   range: searchRange)
+            if range.location == NSNotFound {
+                throw "generateRanges: link '\(linkText)' text not found"
+            }
+            let location = NSMaxRange(range)
+            searchRange = NSRange(location: location,
+                                  length: text.length-location)
+            try link.attr("textLocation", range.location.description)
+            try link.attr("textLength", range.length.description)
+        }
+        
+        for img in try document.select("img") {
+            try img.generateTextLocation()
+        }
+    }
+    
+    func rawTimeStampString(from timestamp: TimeInterval) -> String {
+        return String(format: "%.3f", timestamp)
     }
     
 }

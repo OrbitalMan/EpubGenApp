@@ -15,6 +15,12 @@ struct SmilGenerator {
         let parsCount: Int
     }
     
+    struct Clip {
+        let id: String
+        let begin: TimeInterval
+        let end: TimeInterval
+    }
+    
     let inputURL: URL = {
         Bundle.main.url(forResource: "timings", withExtension: "txt")!
     }()
@@ -30,10 +36,8 @@ struct SmilGenerator {
                     offset: nil).string
     }
     
-    func smil(from audacityString: String,
-              textPath: String,
-              audioPath: String,
-              offset: TimeInterval?) -> Output {
+    func parseClips(from audacityString: String,
+                    offset: TimeInterval?) -> [Clip] {
         let audacityLines = audacityString.components(separatedBy: .newlines)
         var timeStamps: [TimeInterval] = []
         for line in audacityLines {
@@ -52,26 +56,40 @@ struct SmilGenerator {
         if let offset = offset, offset != 0 {
             timeStamps = timeStamps.map { max(0, $0+offset) }
         }
-        let smilStampStrings = timeStamps.map(smilString)
-        var smilString = smilHeader(textPath: textPath)
-        var parsCount = 0
-        if smilStampStrings.isEmpty {
-            return Output(string: smilString+smilFooter(), parsCount: parsCount)
+        var clips: [Clip] = []
+        for index in 0..<timeStamps.count-1 {
+            let id = String(format: "%06d", index+1)
+            let begin = timeStamps[index]
+            let end = timeStamps[index+1]
+            let clip = Clip(id: id, begin: begin, end: end)
+            clips.append(clip)
         }
-        for index in 0..<smilStampStrings.count-1 {
-            let parId = String(format: "%06d", index+1)
-            let begin = smilStampStrings[index]
-            let end = smilStampStrings[index+1]
+        return clips
+    }
+    
+    func smil(from audacityString: String,
+              textPath: String,
+              audioPath: String,
+              offset: TimeInterval?) -> Output {
+        let clips = parseClips(from: audacityString, offset: offset)
+        var smilOutputString = smilHeader(textPath: textPath)
+        var parsCount = 0
+        if clips.isEmpty {
+            return Output(string: smilOutputString+smilFooter(), parsCount: parsCount)
+        }
+        for clip in clips {
+            let begin = smilString(from: clip.begin)
+            let end = smilString(from: clip.end)
             let paragraph = """
-            <par id=\"p\(parId)\"><text src="\(textPath)#f\(parId)"/>
+            <par id=\"p\(clip.id)\"><text src="\(textPath)#f\(clip.id)"/>
             <audio clipBegin="\(begin)" clipEnd="\(end)" src="\(audioPath)"/>
             </par>
             
             """
-            smilString.append(paragraph)
+            smilOutputString.append(paragraph)
             parsCount += 1
         }
-        return Output(string: smilString+smilFooter(), parsCount: parsCount)
+        return Output(string: smilOutputString+smilFooter(), parsCount: parsCount)
     }
     
     func smilHeader(textPath: String) -> String {
