@@ -374,6 +374,7 @@ struct ColoredSpanGenerator {
         }
         var title = try firstSpan.text()
         title = title.replacingOccurrences(of: "§ \\d+. ", with: "", options: .regularExpression)
+        title = title.replacingOccurrences(of: "Тема \\d+. ", with: "", options: .regularExpression)
         if title.suffix(1) == "." {
             title = String(title.dropLast())
         }
@@ -392,7 +393,7 @@ struct ColoredSpanGenerator {
                                    options: [.caseInsensitive, .diacriticInsensitive],
                                    range: searchRange)
             if range.location == NSNotFound {
-                throw "\ngenerateRanges: span\n'\(spanText)'\ntext not found in\n'\(text.substring(with: searchRange))'\n"
+                throw "\ngenerateRanges: span\n'\(spanText)'\ntext not found in\n'\(text.substring(with: searchRange).prefix(1000))'\n"
             }
             let location = NSMaxRange(range)
             searchRange = NSRange(location: location,

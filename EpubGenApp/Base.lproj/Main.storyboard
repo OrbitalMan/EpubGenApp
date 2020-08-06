@@ -678,7 +678,7 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="96" y="-358"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -700,7 +700,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="270"/>
+            <point key="canvasLocation" x="74" y="-155"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -717,10 +717,10 @@
                                         <rect key="frame" x="0.0" y="28" width="2226" height="83"/>
                                         <subviews>
                                             <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="1" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6J9-c1-VOh">
-                                                <rect key="frame" x="0.0" y="0.0" width="1732" height="83"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="1665" height="83"/>
                                                 <subviews>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="1000" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hSg-C0-Nsp">
-                                                        <rect key="frame" x="539" y="62" width="655" height="21"/>
+                                                        <rect key="frame" x="505" y="62" width="655" height="21"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="cpC-Ab-70F">
                                                                 <rect key="frame" x="0.0" y="0.0" width="572" height="21"/>
@@ -754,7 +754,7 @@
                                                         </customSpacing>
                                                     </stackView>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r50-h6-bYC">
-                                                        <rect key="frame" x="539" y="31" width="655" height="21"/>
+                                                        <rect key="frame" x="505" y="31" width="655" height="21"/>
                                                         <subviews>
                                                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Uu0-Ql-wzw">
                                                                 <rect key="frame" x="0.0" y="0.0" width="572" height="21"/>
@@ -788,7 +788,7 @@
                                                         </customSpacing>
                                                     </stackView>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E7T-3a-gB6">
-                                                        <rect key="frame" x="539" y="0.0" width="655" height="21"/>
+                                                        <rect key="frame" x="505" y="0.0" width="655" height="21"/>
                                                         <subviews>
                                                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="wE7-9h-rie">
                                                                 <rect key="frame" x="0.0" y="0.0" width="462" height="21"/>
@@ -847,10 +847,10 @@
                                                 </customSpacing>
                                             </stackView>
                                             <stackView distribution="fillEqually" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3N-Fr-Tex">
-                                                <rect key="frame" x="1752" y="0.0" width="474" height="83"/>
+                                                <rect key="frame" x="1685" y="0.0" width="541" height="83"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J8Z-zJ-SyH">
-                                                        <rect key="frame" x="44" y="62" width="387" height="21"/>
+                                                        <rect key="frame" x="77" y="62" width="387" height="21"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="File name" drawsBackground="YES" id="gsk-yS-Myq">
                                                             <font key="font" usesAppearanceFont="YES"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -858,7 +858,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="ooP-O6-umX">
-                                                        <rect key="frame" x="56" y="31" width="362" height="21"/>
+                                                        <rect key="frame" x="90" y="31" width="362" height="21"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Title" drawsBackground="YES" id="7wN-0g-7y1">
                                                             <font key="font" usesAppearanceFont="YES"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -866,7 +866,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZF-fT-gph">
-                                                        <rect key="frame" x="0.0" y="0.0" width="474" height="21"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="541" height="21"/>
                                                         <subviews>
                                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="rL3-d4-1Ih">
                                                                 <rect key="frame" x="0.0" y="7" width="120" height="8"/>
@@ -895,8 +895,18 @@
                                                                     <action selector="showGeneratedInFinder:" target="XfG-lQ-9wD" id="pKA-fg-kL7"/>
                                                                 </connections>
                                                             </button>
+                                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="s6H-wK-lTG">
+                                                                <rect key="frame" x="348" y="-7" width="69" height="32"/>
+                                                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="zQH-PR-24U">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="nextEpub:" target="XfG-lQ-9wD" id="qV9-Fg-COm"/>
+                                                                </connections>
+                                                            </button>
                                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="V1W-8T-fT6">
-                                                                <rect key="frame" x="354" y="7" width="120" height="8"/>
+                                                                <rect key="frame" x="421" y="7" width="120" height="8"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="120" id="DWZ-lf-nji"/>
                                                                     <constraint firstAttribute="height" constant="8" id="aJF-OV-Rp1"/>
@@ -908,8 +918,10 @@
                                                             <integer value="1000"/>
                                                             <integer value="1000"/>
                                                             <integer value="1000"/>
+                                                            <integer value="1000"/>
                                                         </visibilityPriorities>
                                                         <customSpacing>
+                                                            <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>

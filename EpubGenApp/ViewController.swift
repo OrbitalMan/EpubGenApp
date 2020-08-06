@@ -230,15 +230,18 @@ class ViewController: NSViewController {
                                               outputEpubFolderURL: outputEpubFolderURL,
                                               outputRawFolderURL: outputRawFolderURL)
                 DispatchQueue.main.async { [weak self] in
-                    self?.warningLabel.stringValue = "Ready!"
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1) { [weak self] in
-                        self?.warningLabel?.stringValue = ""
-                    }
+                    self?.warningLabel.stringValue = "\(outputFileName ?? "outputFileName") is ready!"
                 }
             } catch {
                 print("composeEpub error:", error)
                 print(" ")
                 DispatchQueue.main.async { [weak self] in
+                    if  let outputEpub = outputEpubFolderURL,
+                        let rawOutput = outputRawFolderURL
+                    {
+                        self?.fileManager.removeIfExists(at: outputEpub)
+                        self?.fileManager.removeIfExists(at: rawOutput)
+                    }
                     self?.view.window?.shake()
                     self?.warningLabel.stringValue = error.logDescription
                 }
@@ -255,6 +258,31 @@ class ViewController: NSViewController {
             return
         }
         NSWorkspace.shared.activateFileViewerSelecting([outputEpubFolderURL])
+    }
+    
+    @IBAction func nextEpub(_ sender: Any) {
+        guard let inputEpubFolderURL = inputEpubFolderURL else {
+            warningLabel.stringValue = "inputEpubFolderURL is missing"
+            return
+        }
+        let folderName = inputEpubFolderURL.lastPathComponent
+        guard
+            let numberString = folderName.components(separatedBy: "_").last,
+            let number = Int(numberString) else
+        {
+            warningLabel.stringValue = "number is missing in folder name of '\(folderName)'"
+            return
+        }
+        let nextNumber = number+1
+        var nextFolderName = folderName.components(separatedBy: "_").dropLast().joined(separator: "_")
+        nextFolderName.append("_\(nextNumber)")
+        let nextInputEpubFolderURL = inputEpubFolderURL.deletingLastPathComponent().appendingPathComponent(nextFolderName)
+        guard fileManager.directoryExists(atPath: nextInputEpubFolderURL.path) else {
+            warningLabel.stringValue = "directory '\(nextFolderName)' is missing"
+            return
+        }
+        self.inputEpubFolderURL = nextInputEpubFolderURL
+        warningLabel.stringValue = "switched to '\(nextFolderName)'!"
     }
     
 }
