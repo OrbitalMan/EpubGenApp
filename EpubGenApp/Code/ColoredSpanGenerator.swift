@@ -141,20 +141,14 @@ struct ColoredSpanGenerator {
         
         var coloredGroups: [ColoredGroup] = []
         var currentColor = ""
-        var currentGroup: [ColoredSpan] = []
         for colored in coloredSpans {
             if colored.color == currentColor {
-                currentGroup.append(colored)
+                coloredGroups[coloredGroups.count - 1].coloredSpans.append(colored)
             } else if let newColor = colored.color {
-                if !currentGroup.isEmpty, !currentColor.isEmpty {
-                    coloredGroups.append(ColoredGroup(coloredSpans: currentGroup, color: currentColor))
-                }
                 currentColor = newColor
-                currentGroup = [colored]
+                let group = ColoredGroup(coloredSpans: [colored], color: currentColor)
+                coloredGroups.append(group)
             }
-        }
-        if !currentGroup.isEmpty, !currentColor.isEmpty {
-            coloredGroups.append(ColoredGroup(coloredSpans: currentGroup, color: currentColor))
         }
         
         let wrappedSpans = try coloredGroups.compactMap(wrapIfNeeded(group:))
@@ -248,10 +242,11 @@ struct ColoredSpanGenerator {
         let style = try findStyleElement(in: document)
         let data = style.getWholeData()
         let replacementPairs: [(String, String)]
-        replacementPairs = [(";background-color:#[a-fA-F0-9]{6};", ";"),
-                            ("\\{background-color:#[a-fA-F0-9]{6};", "{"),
-                            (";background-color:#[a-fA-F0-9]{6}", ""),
-                            ("background-color:#[a-fA-F0-9]{6}", "")]
+        replacementPairs = [(";background-color:\\s+#[a-fA-F0-9]{6};", ";"),
+                            ("\\{background-color:\\s+#[a-fA-F0-9]{6};", "{"),
+                            (";background-color:\\s+#[a-fA-F0-9]{6}", ""),
+                            ("background-color:\\s+#[a-fA-F0-9]{6}", ""),
+                            ("background-color:\\s+#[a-fA-F0-9]{6}", "")]
         var newData = data
         for (pattern, replacement) in replacementPairs {
             newData = newData.replacingOccurrences(of: pattern,
