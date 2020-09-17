@@ -44,6 +44,12 @@ struct ColoredSpanGenerator {
         if !title.isEmpty {
             try document.title(title)
         }
+        
+        /// Remove google doc bookmarks
+        try document.select("a")
+        .filter { $0.id().starts(with: "kix") }
+        .forEach { try? $0.parent()?.removeChild($0) }
+        
         document = try hyphenate(document, with: .softHyphen)
         let coloredElements = try findColoredElements(for: coloredClasses, in: document)
         try identify(elements: coloredElements)
@@ -400,6 +406,9 @@ struct ColoredSpanGenerator {
         searchRange = NSRange(location: 0, length: text.length)
         for link in try document.select("a") {
             let linkText = try link.attributedString().string
+            if linkText.isEmpty {
+                continue
+            }
             let range = text.range(of: linkText,
                                    options: [],
                                    range: searchRange)
