@@ -248,11 +248,11 @@ struct ColoredSpanGenerator {
         let style = try findStyleElement(in: document)
         let data = style.getWholeData()
         let replacementPairs: [(String, String)]
-        replacementPairs = [(";background-color:\\s+#[a-fA-F0-9]{6};", ";"),
-                            ("\\{background-color:\\s+#[a-fA-F0-9]{6};", "{"),
-                            (";background-color:\\s+#[a-fA-F0-9]{6}", ""),
-                            ("background-color:\\s+#[a-fA-F0-9]{6}", ""),
-                            ("background-color:\\s+#[a-fA-F0-9]{6}", "")]
+        replacementPairs = [(";background-color:\\s**#[a-fA-F0-9]{6};", ";"),
+                            ("\\{background-color:\\s*#[a-fA-F0-9]{6};", "{"),
+                            (";background-color:\\s*#[a-fA-F0-9]{6}", ""),
+                            ("background-color:\\s*#[a-fA-F0-9]{6}", ""),
+                            ("background-color:\\s*#[a-fA-F0-9]{6}", "")]
         var newData = data
         for (pattern, replacement) in replacementPairs {
             newData = newData.replacingOccurrences(of: pattern,
