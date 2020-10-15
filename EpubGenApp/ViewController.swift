@@ -32,17 +32,11 @@ class ViewController: NSViewController {
     }
     
     var inputMetadataURL: URL? {
-        guard let inputEpubFolderURL = inputEpubFolderURL else { return nil }
-        let root = inputEpubFolderURL.deletingLastPathComponent()
-        let metadata = root.appendingPathComponent("metadata")
-        guard fileManager.directoryExists(atPath: metadata.path) else { return root }
-        let paragraphMetadata = metadata.appendingPathComponent(inputEpubFolderURL.lastPathComponent)
-        guard fileManager.directoryExists(atPath: paragraphMetadata.path) else { return metadata }
-        return paragraphMetadata
+        inputEpubFolderURL
     }
     
     var estimatedInputAudioFileURL: URL? {
-        return fileManager.files(inDirectory: inputMetadataURL).first { $0.lastPathComponent.contains("_b44.mp3") }
+        return fileManager.files(inDirectory: inputMetadataURL).first { $0.lastPathComponent == "audio.mp3" }
     }
     
     var estimatedInputTimingFileURL: URL? {
@@ -73,9 +67,8 @@ class ViewController: NSViewController {
     
     var outputTitle: String? {
         get {
-            let title = outputTitleField?.stringValue ?? ""
-            if title.isEmpty { return nil }
-            return title
+            let title = outputTitleField?.stringValue
+            return title.flatMap({ $0.isEmpty ? nil : $0 }) ?? outputFileName
         } set {
             outputTitleField?.stringValue = newValue ?? ""
         }

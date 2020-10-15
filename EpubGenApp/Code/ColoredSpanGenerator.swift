@@ -44,6 +44,12 @@ struct ColoredSpanGenerator {
         if !title.isEmpty {
             try document.title(title)
         }
+        
+        /// Remove google doc bookmarks
+        try document.select("a")
+        .filter { $0.id().starts(with: "kix") }
+        .forEach { try? $0.parent()?.removeChild($0) }
+        
         document = try hyphenate(document, with: .softHyphen)
         let coloredElements = try findColoredElements(for: coloredClasses, in: document)
         try identify(elements: coloredElements)
@@ -54,6 +60,7 @@ struct ColoredSpanGenerator {
         
         var outputString = try document.xhtml()
         outputString = removeUnwantedWhitespaces(in: outputString)
+        
         if let timing = timingData {
             document = try SwiftSoup.parse(outputString)
             let spans = try document.select("span")
@@ -141,20 +148,14 @@ struct ColoredSpanGenerator {
         
         var coloredGroups: [ColoredGroup] = []
         var currentColor = ""
-        var currentGroup: [ColoredSpan] = []
         for colored in coloredSpans {
             if colored.color == currentColor {
-                currentGroup.append(colored)
+                coloredGroups[coloredGroups.count - 1].coloredSpans.append(colored)
             } else if let newColor = colored.color {
-                if !currentGroup.isEmpty, !currentColor.isEmpty {
-                    coloredGroups.append(ColoredGroup(coloredSpans: currentGroup, color: currentColor))
-                }
                 currentColor = newColor
-                currentGroup = [colored]
+                let group = ColoredGroup(coloredSpans: [colored], color: currentColor)
+                coloredGroups.append(group)
             }
-        }
-        if !currentGroup.isEmpty, !currentColor.isEmpty {
-            coloredGroups.append(ColoredGroup(coloredSpans: currentGroup, color: currentColor))
         }
         
         let wrappedSpans = try coloredGroups.compactMap(wrapIfNeeded(group:))
@@ -248,10 +249,11 @@ struct ColoredSpanGenerator {
         let style = try findStyleElement(in: document)
         let data = style.getWholeData()
         let replacementPairs: [(String, String)]
-        replacementPairs = [(";background-color:#[a-fA-F0-9]{6};", ";"),
-                            ("\\{background-color:#[a-fA-F0-9]{6};", "{"),
-                            (";background-color:#[a-fA-F0-9]{6}", ""),
-                            ("background-color:#[a-fA-F0-9]{6}", "")]
+        replacementPairs = [(";background-color:\\s*#[a-fA-F0-9]{6};", ";"),
+                            ("\\{background-color:\\s*#[a-fA-F0-9]{6};", "{"),
+                            (";background-color:\\s*#[a-fA-F0-9]{6}", ""),
+                            ("background-color:\\s*#[a-fA-F0-9]{6}", ""),
+                            ("background-color:\\s*#[a-fA-F0-9]{6}", "")]
         var newData = data
         for (pattern, replacement) in replacementPairs {
             newData = newData.replacingOccurrences(of: pattern,
@@ -405,6 +407,9 @@ struct ColoredSpanGenerator {
         searchRange = NSRange(location: 0, length: text.length)
         for link in try document.select("a") {
             let linkText = try link.attributedString().string
+            if linkText.isEmpty {
+                continue
+            }
             let range = text.range(of: linkText,
                                    options: [],
                                    range: searchRange)

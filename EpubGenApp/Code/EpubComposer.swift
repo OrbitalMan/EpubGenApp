@@ -174,9 +174,11 @@ class EpubComposer {
         
         delegate?.event(message: "Composing xhtml")
         
-        let inputXHTMLFileURL = inputGoogleDocFolderURL
-            .appendingPathComponent(inputEpubFolderURL.lastPathComponent)
-            .appendingPathExtension("xhtml")
+        let inputXHTMLFileURL = try FileManager.default
+            .contentsOfDirectory(at: inputGoogleDocFolderURL, includingPropertiesForKeys: .none, options: [])
+            .filter({ $0.pathExtension == "xhtml" })
+            .first(where: { $0.lastPathComponent != "nav.xhtml" })!
+        
         let xhtmlInputString = try String(contentsOf: inputXHTMLFileURL)
         let xhtmlOutput = try spanGenerator.output(input: xhtmlInputString,
                                                    title: outputTitle,

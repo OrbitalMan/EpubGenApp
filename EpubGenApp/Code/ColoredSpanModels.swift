@@ -72,7 +72,7 @@ struct ColoredSpan {
 
 struct ColoredGroup {
     
-    let coloredSpans: [ColoredSpan]
+    var coloredSpans: [ColoredSpan]
     let color: String
     
     var desc: String {
