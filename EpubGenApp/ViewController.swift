@@ -258,7 +258,18 @@ class ViewController: NSViewController {
         }
         NSWorkspace.shared.activateFileViewerSelecting([outputEpubFolderURL])
     }
-    
+
+    @IBAction func showRawGeneratedInFinder(_ sender: Any) {
+        guard
+            let outputRawFolderURL = outputRawFolderURL,
+            let firstFile = fileManager.files(inDirectory: outputRawFolderURL).first else
+        {
+            view.window?.shake()
+            return
+        }
+        NSWorkspace.shared.activateFileViewerSelecting([firstFile])
+    }
+
     @IBAction func nextEpub(_ sender: Any) {
         guard let inputEpubFolderURL = inputEpubFolderURL else {
             warningLabel.stringValue = "inputEpubFolderURL is missing"
