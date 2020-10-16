@@ -32,11 +32,17 @@ class ViewController: NSViewController {
     }
     
     var inputMetadataURL: URL? {
-        inputEpubFolderURL
+        guard var inputMetadataURL = inputEpubFolderURL else {
+            return nil
+        }
+        let folder = inputMetadataURL.lastPathComponent.replacingOccurrences(of: "paragraph", with: "meta")
+        inputMetadataURL.deleteLastPathComponent()
+        inputMetadataURL.appendPathComponent(folder)
+        return inputMetadataURL
     }
     
     var estimatedInputAudioFileURL: URL? {
-        return fileManager.files(inDirectory: inputMetadataURL).first { $0.lastPathComponent == "audio.mp3" }
+        return fileManager.files(inDirectory: inputMetadataURL).first { $0.pathExtension == "mp3" }
     }
     
     var estimatedInputTimingFileURL: URL? {
